@@ -7,7 +7,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "server": "nodemon server.js"
+    "server": "node server.js"
   },
   "author": "Nimish",
   "license": "ISC",
