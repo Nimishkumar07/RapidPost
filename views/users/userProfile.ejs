@@ -1,0 +1,356 @@
+<% layout("layouts/boilerplate") %>
+
+<!-- <h2><%= user.username %>'s Profile</h2>
+<p>Followers: <%= followersCount %></p>
+<p>Following: <%= followingCount %></p>
+
+<form action="/users/<%= user._id %>/follow" method="POST">
+  <button>
+    <% if (currentUser && currentUser.following.includes(user._id)) { %>
+      Unfollow
+    <% } else { %>
+      Follow
+    <% } %>
+  </button>
+</form> -->
+
+<%
+  const p = user;
+  const socials = p.socialLinks || {};
+%>
+<section class="py-3 px-md-5  ">
+  <div class="container">
+    <div class="profile-card card shadow-lg border-0 rounded-4">
+      <div class="card-body p-5 ">
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between">
+          <div class="d-flex gap-3 align-items-start flex-column flex-md-row">
+            <div class="position-relative">
+              <div class="rounded-circle bg-light d-flex align-items-center justify-content-center" style="width:112px;height:112px;">
+                <% if (p.avatar.url) { %>
+                  <img src="<%= p.avatar.url %>" alt="<%= p.name %>" class="rounded-circle" style="width:112px;height:112px;object-fit:cover;" />
+                <% } else { %>
+                  <span class="text-muted small">No Image</span>
+                <% } %>
+              </div>
+              
+            </div>
+            <div>
+              <div class="d-flex align-items-center gap-2">
+                <h1 class="h4 fw-bold mb-0"><%= p.name %></h1>
+                <span class="text-primary" aria-label="verified">✔</span>
+              </div>
+              <div class="text-muted">@<%= p.username %></div>
+              <p class="text-secondary mt-2 mb-0" style="max-width: 56ch;"><%= p.bio %></p>
+            </div>
+          </div>
+          
+        <% if (currUser && currUser._id.toString() === user._id.toString()) { %>
+          <a href="/users/<%= currUser._id %>/edit" class="btn btn-primary mt-3 mt-md-0 d-inline-flex align-items-center gap-2">
+            <i class="bi bi-gear"></i>
+            <span class="small">Edit Profile</span>
+          </a>
+          <% } %>
+        </div>
+
+        <div class="d-flex flex-wrap gap-4 mt-4 text-secondary">
+          <p class="mb-0"><span class="fw-semibold"><%= p.blogs.length %></span> Blogs</p>
+          <p class="mb-0"><span id="followerCount" class="fw-semibold"><%= followersCount %></span> Followers</p>
+          <p class="mb-0"><span class="fw-semibold"><%= followingCount %></span> Following</p>
+        </div>
+
+        <div class="d-flex gap-2 mt-4">
+          
+            <a href="<%= p.socialLinks.twitter %>" class=" btn-light btn-sm rounded-circle" title="Twitter"><i class="fa-brands fa-x-twitter fa-xl"></i><a>
+          
+
+            <a href="<%= p.socialLinks.linkedin %>" class=" btn-light btn-sm rounded-circle" title="LinkedIn"><i class="fa-brands fa-linkedin fa-xl me-2"></i></a>
+         
+          
+            <a href="<%= p.socialLinks.github %>" class=" btn-light btn-sm rounded-circle" title="GitHub"><i class="fa-brands fa-square-github fa-xl me-2"></i></a>
+        
+          
+            <a href="<%= p.socialLinks.instagram %>" class=" btn-light btn-sm rounded-circle" title="Website"><i class="fa-brands fa-square-instagram fa-xl me-2"></i></a>
+          
+        </div>
+
+        <div class="d-flex align-items-center gap-2 text-muted small mt-4">
+          <i class="bi bi-calendar2"></i>
+          <span>Joined <%= p.createdAt.toLocaleDateString() %></span>
+        </div>
+
+        <% if (currentUser && currentUser._id.toString() !== user._id.toString()) { %>
+        <div class="mt-3">
+          <form action="/users/<%= user._id %>/follow" method="POST">
+             
+             <button  type="submit" class="btn btn-outline-primary btn-md">
+                <% if (currentUser && currentUser.following.includes(user._id)) { %>
+                  Unfollow
+                <% } else { %>
+                  Follow
+                <% } %>
+              </button>
+          </form>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<% if (currUser && currUser._id.toString() === user._id.toString()) { %>
+<div class="mx-md-4 my-5 ">
+  <div class="row g-4" data-id="analytics-cards">
+    <!-- Total Views -->
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="analytics card rounded-4 shadow-lg border-0 h-100">
+        <div class="card-body rounded-4 bg-primary-subtle p-4 d-flex align-items-start justify-content-between">
+          <div>
+            <p class="text-muted small mb-1 fw-medium">Total Views</p>
+            <p class="fs-4 fw-bold text-dark mb-1"><%= totalViews  %></p>
+            <p class="text-success small d-flex align-items-center mb-0">
+              <i class="bi bi-graph-up-arrow me-1"></i>
+              <%= user.blogs.views || '+12.5%' %>
+            </p>
+          </div>
+          <div class="bg-primary-subtle rounded">
+            <i class="bi bi-eye fs-1 text-primary analytics-icon"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Total Likes -->
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="analytics card rounded-4 shadow-lg border-0 h-100">
+        <div class="card-body bg-danger-subtle rounded-4 p-4 d-flex align-items-start justify-content-between">
+          <div>
+            <p class="text-muted small mb-1 fw-medium">Total Likes</p>
+            <p class="fs-4 fw-bold text-dark mb-1"><%= totalLikes  %></p>
+            <p class="text-success small d-flex align-items-center mb-0">
+              <i class="bi bi-graph-up-arrow me-1"></i>
+              <%= user.blogs.likes || '+8.2%' %>
+            </p>
+          </div>
+          <div class="bg-danger-subtle rounded">
+            <i class="bi bi-heart fs-1 text-danger analytics-icon"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comments -->
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="analytics card rounded-4 shadow-lg border-0 h-100">
+        <div class="card-body bg-success-subtle rounded-4 p-4 d-flex align-items-start justify-content-between">
+          <div>
+            <p class="text-muted small mb-1 fw-medium">Comments</p>
+            <p class="fs-4 fw-bold text-dark mb-1"><%= totalComments  %></p>
+            <p class="text-success small d-flex align-items-center mb-0">
+              <i class="bi bi-graph-up-arrow me-1"></i>
+              <%= user.blogs.reviews || '+15.3%' %>
+            </p>
+          </div>
+          <div class="bg-success-subtle rounded">
+            <i class="bi bi-chat-left-text fs-1 text-success analytics-icon"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Published Blogs -->
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="analytics card rounded-4 shadow-lg border-0 h-100">
+        <div style="background:#efe7ff;" class="card-body rounded-4 p-4 d-flex align-items-start justify-content-between">
+          <div>
+            <p class="text-muted small mb-1 fw-medium">Published Blogs</p>
+            <p class="fs-4 fw-bold text-dark mb-1"><%= user.blogCount  %></p>
+            <p class="text-primary small d-flex align-items-center mb-0">
+              <i class="bi bi-book me-1"></i>
+              
+            </p>
+          </div>
+          <div class=" rounded" style="background:#efe7ff;">
+            <i class="bi bi-file-text fs-1analytics-icon" style="color:#6f42c1;"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% } %>
+
+<div class="mx-md-5 shadow-lg border-0 rounded-4 py-4 my-5">
+  <div class="d-flex text-center justify-content-between">
+  <% if (currUser && currUser._id.toString() === user._id.toString()) { %>
+    <!-- When viewing your own profile -->
+    <h1 class="ps-4">Your Blogs</h1>
+    <a href="/blogs/new" class="btn  me-4 px-sm-4" style="padding-top:0.75rem">
+      <i class="bi bi-plus-lg me-2"></i>Write New Blog
+    </a>
+  <% } else { %>
+    <!-- When viewing someone else’s profile -->
+    <h1 class="ps-4">All Blogs</h1>
+  <% } %>
+</div>
+
+
+         <% if (user.blogs.length == 0) { %>
+            <div class="text-center mt-3">
+              <a href="/blogs/new" class=" text-decoration-none cursor-pointer">Publish your First Blog</a>
+            </div>
+          <% } %>
+
+  <div id="blogsContainer">
+    <% user.blogs.forEach((blog, index) => { %>
+      <div class="blog-item border rounded-3 p-3 d-flex flex-column justify-content-between mt-3 mx-4 blog-item <%= index >= 3 ? 'd-none extra-blog' : '' %>">
+        <div>
+          <a href="/blogs/<%= blog._id %>" class="text-dark cursor-pointer fw-semibold text-decoration-none fw-semibold"><%= blog.title %></a>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-1">
+          <div class="text-muted small d-flex gap-3">
+            <div>
+              <i class="bi bi-calendar2"></i>
+            <%= new Date(blog.createdAt).toLocaleDateString() %>
+            </div>
+            
+            <% if (typeof blog.views !== 'undefined') { %>
+              <span title="Views"><i class="bi bi-eye"></i> <%= blog.views %></span>
+            <% } %>
+            <% if (typeof blog.likes !== 'undefined') { %>
+              <span title="Likes"><i class="bi bi-heart"></i> <%= blog.likes.length %></span>
+            <% } %>
+            <% if (typeof blog.reviews !== 'undefined') { %>
+              <span title="Comments"><i class="bi bi-chat"></i> <%= blog.reviews.length %></span>
+            <% } %>
+          </div>
+
+          <% if(currUser && currUser._id.equals(blog.author._id)) { %>
+          <div class="d-flex">
+            
+              <a href="/blogs/<%= blog._id %>/edit" class="btnn-decore me-3"><i class="fa-solid fa-pen-to-square fa-lg edit"></i></a>
+           
+            <form action="/blogs/<%= blog._id %>?_method=DELETE" method="post">
+              <button class="btnn-decore"><i class="fa-solid fa-trash fa-lg delete"></i></button>
+            </form>
+          </div>
+          <% } %>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+
+  <% if (user.blogs.length > 3) { %>
+    <div class="text-center mt-3">
+      <a id="toggleBlogs" class=" text-decoration-none cursor-pointer">View All Blogs</a>
+    </div>
+  <% } %>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const toggleBtn = document.getElementById("toggleBlogs");
+    if (toggleBtn) {
+      toggleBtn.addEventListener("click", function() {
+        const extraBlogs = document.querySelectorAll(".extra-blog");
+        const isHidden = extraBlogs[0].classList.contains("d-none");
+
+        extraBlogs.forEach(blog => blog.classList.toggle("d-none"));
+        toggleBtn.textContent = isHidden ? "View Less" : "View All Blogs";
+      });
+    }
+  });
+</script>
+
+<% if (currUser && currUser._id.toString() === user._id.toString()) { %>
+<!-- Saved Blogs -->
+<div class="mx-md-5 shadow-lg border-0 rounded-4 py-4 my-5">
+  <div class="card-body">
+    <div class="d-flex justify-content-between mb-3">
+      <h2 class="h2 mb-3 mb-md-0 ms-4">Saved Blogs</h2>
+      <div class="d-flex">
+        <a class="btn btn-light border d-flex align-items-center me-4 px-4">
+          <i class="bi bi-bookmark-check me-2"></i> Dashboard
+        </a>
+      </div>
+    </div>
+
+          <% if (user.savedBlogs.length == 0) { %>
+            <div class="text-center mt-3">
+              <p id="" class=" text-center text-primary ">You dont't have saved Blogs</p>
+            </div>
+          <% } %>
+
+    <div id="blogsContainer">
+      <% user.savedBlogs.forEach((blog, index) => { %>
+        <div class="border rounded-3 p-3 d-flex flex-column justify-content-between mt-3 mx-4 blog-item <%= index >= 3 ? 'd-none extra-saved-blog' : '' %>">
+          <div>
+            <a href="/blogs/<%= blog._id %>" class=" text-dark cursor-pointer fw-semibold text-decoration-none"><%= blog.title %></a>
+            
+          </div>
+
+        
+          
+          <div class="d-flex justify-content-between align-items-center mt-1">
+            <div class="text-muted small d-flex gap-3">
+              <div>
+              <i class="bi bi-calendar2"></i>
+            <%= new Date(blog.createdAt).toLocaleDateString() %>
+            </div>
+              <% if (typeof blog.views !== 'undefined') { %>
+                <span title="Views"><i class="bi bi-eye"></i> <%= blog.views %></span>
+              <% } %>
+              <% if (typeof blog.likes !== 'undefined') { %>
+                <span title="Likes"><i class="bi bi-heart"></i> <%= blog.likes.length %></span>
+              <% } %>
+              <% if (typeof blog.reviews !== 'undefined') { %>
+                <span title="Comments"><i class="bi bi-chat"></i> <%= blog.reviews.length %></span>
+              <% } %>
+            </div>
+
+            <div class="d-flex">
+              <form action="/blogs/<%= blog._id %>/save" method="post" class="m-0">
+          <button type="submit" class="btnn-decore btn-link text-muted text-decoration-none p-0 d-inline-flex align-items-center">
+             <% if (user && user.savedBlogs && user.savedBlogs.includes(blog._id.toString())) { %>
+              
+              <i class="fa-regular fa-bookmark me-2"></i>
+                Save
+              <% } else { %>
+                <i class="fa-solid fa-bookmark me-2"></i>  
+              Unsave
+              <% } %>
+          </button>
+        </form>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+
+    <% if (user.savedBlogs.length > 3) { %>
+      <p class="text-primary text-center pt-3 mb-0">
+        <a id="toggleSavedBlogs" class="cursor-pointer text-decoration-none">View All Blogs</a>
+      </p>
+    <% } %>
+  </div>
+</div>
+<% } %>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const toggleSavedBtn = document.getElementById("toggleSavedBlogs");
+    if (toggleSavedBtn) {
+      toggleSavedBtn.addEventListener("click", function() {
+        const extraSavedBlogs = document.querySelectorAll(".extra-saved-blog");
+        const isHidden = extraSavedBlogs[0].classList.contains("d-none");
+
+        extraSavedBlogs.forEach(blog => blog.classList.toggle("d-none"));
+        toggleSavedBtn.textContent = isHidden ? "View Less" : "View All Blogs";
+      });
+    }
+  });
+</script>
+
+
+
+

@@ -1,0 +1,148 @@
+<% layout("layouts/boilerplate") %>
+
+
+
+<div class="bg-white min-vh-100 py-4">
+  <div class="container" style="max-width: 64rem;">
+    <!-- Header -->
+    <div class="mb-4">
+      <h1 class="fw-bold text-dark display-6 mb-2">Edit your Blog</h1>
+      <p class="lead text-muted">Update your existing blog post</p>
+    </div>
+
+   
+
+    <!-- Blog Form -->
+    <form id="blogForm" action="/blogs/<%= blog._id %>?_method=PUT" method="post" enctype="multipart/form-data" class="card">
+      <div class="card-body">
+        <!-- Title -->
+        <div class="mb-3">
+          <label class="form-label">Title*</label>
+          <input id="title" name="blog[title]" type="text" class="form-control" placeholder="Enter your blog title..." value="<%= blog.title %>" required>
+        </div>
+
+
+        <!-- Category + Tags -->
+        <div class="mb-3">
+          <label class="form-label">Category*</label>
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <select id="category" name="blog[category]" class="form-select" value="<%= blog.category %>" required>
+                <option value="">Select a category</option>
+                <option value="Technology">Technology</option>
+                <option value="Design">Design</option>
+                <option value="Business">Business</option>
+                <option value="Lifestyle">Lifestyle</option>
+                <option value="Health">Health</option>
+                <option value="Travel">Travel</option>
+                <option value="Food">Food</option>
+                <option value="Education">Education</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-6">
+              <input id="tags"  type="text" class="form-control" placeholder="Tags (ai, technology, future)" >
+            </div>
+          </div>
+        </div>
+
+        <!-- Thumbnail -->
+        <div class="mb-3">
+            <p>Original Image</p>
+            <img src="<%= originalImageUrl %>" alt=""> <br>
+          <label class="form-label">Thumbnail*</label>
+
+          <input id="thumbnail" name="blog[image]" type="file" class="form-control" accept="image/*" >
+          <div id="thumbPreviewWrap" class="mt-3 d-none">
+            <img id="thumbPreview" alt="Thumbnail Preview" class="img-thumbnail" style="max-width: 320px;">
+          </div>
+        </div>
+
+        
+
+        <!-- Blog Content (Quill) -->
+        <div class="mb-3">
+          <label class="form-label">Content*</label>
+          <div id="quill-editor"  style="height: 320px; overflow-y: auto;"></div>
+          <!-- Hidden field to submit HTML -->
+          <input type="hidden" id="content" name="blog[description]" value="<%= blog.description %>">
+        </div>
+
+        <!-- Submit -->
+        <div class="d-grid d-2xl-flex gap-2">
+          <button id="btnPublish" type="submit" class="btn btn-primary mb-1">
+            <span class="spinner-border spinner-border-sm me-2 d-none" role="status" aria-hidden="true"></span>
+            <i class="bi bi-send me-2"></i>
+            Publish Blog
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const formEl = document.getElementById('blogForm');
+    const editorEl = document.getElementById('quill-editor');
+    const hiddenEl = document.getElementById('content');
+
+    if (!formEl || !editorEl || !hiddenEl) return;
+
+    // Prevent double init: if Quill already attached, skip
+    if (editorEl.__quill) {
+      // Already initialized by another script
+      return;
+    }
+
+    const quill = new Quill('#quill-editor', { theme: 'snow' });
+    // Mark to avoid re-init
+    editorEl.__quill = quill;
+
+    // preload
+    if (hiddenEl.value && hiddenEl.value !== 'description') {
+      quill.root.innerHTML = hiddenEl.value;
+    }
+
+    quill.on('text-change', function () {
+      hiddenEl.value = editorEl.querySelector('.ql-editor').innerHTML;
+    });
+    formEl.addEventListener('submit', function () {
+      hiddenEl.value = editorEl.querySelector('.ql-editor').innerHTML;
+    });
+  });
+</script>
+
+
+
+
+
+<script>
+  // Initial AI mode from server (optional)
+  const initialAi = <%= typeof isAiMode !== 'undefined' && isAiMode ? 'true' : 'false' %>;
+  const aiPanel = document.getElementById('ai-panel');
+  const btnManual = document.getElementById('mode-manual');
+  const btnAi = document.getElementById('mode-ai');
+
+  function setMode(ai) {
+    if (ai) {
+      aiPanel.classList.remove('d-none');
+      btnAi.classList.add('border-primary', 'bg-light');
+      btnManual.classList.remove('border-primary', 'bg-light');
+    } else {
+      aiPanel.classList.add('d-none');
+      btnManual.classList.add('border-primary', 'bg-light');
+      btnAi.classList.remove('border-primary', 'bg-light');
+    }
+  }
+  btnManual.addEventListener('click', () => setMode(false));
+  btnAi.addEventListener('click', () => setMode(true));
+  setMode(initialAi);
+</script>
+
+
+
+
+
+

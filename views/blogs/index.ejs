@@ -1,0 +1,136 @@
+<% layout("/layouts/boilerplate") %>
+
+
+<body>
+  <div class="position-relative mx-3 mx-sm-5 mx-xl-7">
+    <div class="text-center mt-5 mb-4 ">
+      <div
+        class="AI d-inline-flex align-items-center gap-2 px-4 py-1 mb-3 rounded-pill small"
+      >
+        <p class="m-0">New: AI feature integrated</p>
+        <i
+          class="ms-1 fa-solid fa-wand-magic-sparkles"
+          style="color: #9810fa"
+        ></i>
+      </div>
+
+      <h1 class="tagline fw-semibold text-dark lh-sm display-5 fs-sm-6">
+        Your own <span class="Blogging">Blogging</span><br />
+        platform.
+      </h1>
+
+      <p class="my-4 my-sm-5 mx-auto text-muted" style="max-width: 42rem">
+        This is your space to think out loud, to share what matters, and to
+        write without filters. <br />
+        Whether it's one word or a thousand, your story starts right here.
+      </p>
+
+      <form
+        action=""
+        method="GET"
+        class="mx-auto"
+        style="max-width: 36rem"
+      >
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            name="q"
+            placeholder="Search for blogs"
+            required
+          />
+          <button class="btn" type="submit">Search</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- <img src="" alt="img"
+       class="position-absolute top-0 start-50 translate-middle-x"
+       style="opacity:.5; z-index:-1; max-width:100%;"/> -->
+  </div>
+
+  
+  <div class=" mx-auto row row-cols row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-5 mt-3">
+    <% for(let blog of allBlogs) { %>
+    <div class="col">
+      <div class="card blog-card h-100">
+        <a href="/blogs/<%= blog._id  %>" class="card-link text-decoration-none text-dark">
+          <!-- Blog Image -->
+          <img
+            src="<%= blog.image.url %>"
+            class="card-img-top"
+            alt="<%= blog.title %>"
+            style="height: 13rem; object-fit: cover"
+          />
+        
+
+        <div class="card-body">
+          <!-- Category -->
+          <span
+            class="badge rounded-pill bg-primary-subtle text-primary fw-semibold mb-2"
+          >
+            <%= blog.category %>
+          </span>
+
+          <!-- Title -->
+          <h5 class="card-title"><%= blog.title %></h5>
+
+          <!-- Short Description -->
+          <p class="card-text"><%= (blog.description || '').replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').slice(0, 80) %></p>
+
+
+          <!-- Author + Stats in same line -->
+          <div class="d-flex justify-content-between align-items-center mt-3">
+            <!-- Author -->
+            <div class="d-flex align-items-center gap-2">
+              <img
+                src="<%= blog.author && blog.author.avatar.url %>"
+                alt="<%= blog.author && blog.author.name %>"
+                class="rounded-circle"
+                style="width: 32px; height: 32px; object-fit: cover"
+              />
+              <div class="d-flex flex-column">
+                <span class="small fw-medium text-dark">
+                  <%= blog.author && blog.author.name %>
+                </span>
+                <span class="small text-muted">
+                  <%= new Date(blog.createdAt).toLocaleDateString() %>
+                </span>
+              </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="d-flex align-items-center gap-3 text-muted small">
+              <span class="d-inline-flex align-items-center">
+                <!-- Eye icon -->
+                <i class="fa-solid fa-eye me-1" style="color: #818992"></i>
+                <%= blog.views %>
+              </span>
+              <span class="d-inline-flex align-items-center">
+                <!-- Heart icon -->
+                <i class="fa-solid fa-heart me-1" style="color: #898f9a"></i>
+                <%= (blog.likes && blog.likes.length) || 0 %>
+              </span>
+            </div>
+          </div>
+        </div>
+        </a>
+      </div>
+    </div>
+    <% } %>
+  </div>
+
+  <div class="container my-5">
+  <div class="d-flex flex-column align-items-center text-center">
+    <h1 class="h3 h1-md fw-semibold">Never Miss a Blog!</h1>
+    <p class="text-muted mb-4">Subscribe to get the latest blog, new tech, and exclusive news.</p>
+    <form action="" method="POST" class="w-100" style="max-width: 48rem;">
+      <div class="input-group">
+        <input type="email" class="form-control" name="email" placeholder="Enter your email id" required />
+        <button class="btn  px-4 px-md-5" type="submit">Subscribe</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+

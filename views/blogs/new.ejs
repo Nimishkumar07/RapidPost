@@ -1,0 +1,275 @@
+<% layout("layouts/boilerplate") %>
+
+
+
+<div class="bg-white min-vh-100 py-4">
+  <div class="container" style="max-width: 64rem;">
+    <!-- Header -->
+    <div class="mb-4">
+      <h1 class="fw-bold text-dark display-6 mb-2">Create Your Blog</h1>
+      <p class="lead text-muted">Write manually or use AI to generate amazing content</p>
+    </div>
+
+    <!-- Writing Mode -->
+    <div class="row g-3 mb-4">
+      <div class="col-12 col-sm-6">
+        <button type="button" id="mode-manual" class="w-100 p-4 border rounded-3 bg-white">
+          <div class="text-center mb-2">
+            <i class="fa-solid fa-2xl fa-pencil" style="color: #9810fa;"></i>
+          </div>
+          <h3 class="h6 fw-semibold mb-1 text-center">Manual Writing</h3>
+          <p class="text-muted small text-center mb-0">Write your blog content from scratch</p>
+        </button>
+      </div>
+      <div class="col-12 col-sm-6">
+        <button type="button" id="mode-ai" class="w-100 p-4 border rounded-3 bg-white">
+          <div class="text-center mb-2">
+           <i class="fa-solid fa-bolt fa-2xl me-2" style="color: #9810fa;"></i>
+          </div>
+          <h3 class="h6 fw-semibold mb-1 text-center">AI-Powered</h3>
+          <p class="text-muted small text-center mb-0">Generate content using AI assistance</p>
+        </button>
+      </div>
+    </div>
+
+    <!-- AI Panel -->
+    <div id="ai-panel" class="card border-primary-subtle mb-4 d-none">
+      <div class="card-body">
+        <h3 class="h5 fw-semibold mb-3 d-flex align-items-center">
+          <i class="bi bi-stars text-primary me-2"></i>
+          AI Content Generator
+        </h3>
+
+        <div class="mb-3">
+          <label class="form-label">What would you like to write about?</label>
+          <textarea id="aiPrompt" rows="3" class="form-control" placeholder="Topic, idea, or brief..." required></textarea>
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-12 col-md-4">
+            <label class="form-label">Tone</label>
+            <select id="aiTone" class="form-select">
+              <option value="professional" selected>Professional</option>
+              <option value="casual">Casual</option>
+              <option value="technical">Technical</option>
+              <option value="creative">Creative</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-4">
+            <label class="form-label">Length</label>
+            <select id="aiLength" class="form-select">
+              <option value="short" selected>Short (300-500)</option>
+              <option value="medium">Medium (800-1200)</option>
+              <option value="long">Long (1500+)</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-4">
+            <label class="form-label">Format</label>
+            <select id="aiFormat" class="form-select">
+              <option value="article" selected>Article</option>
+              <option value="tutorial">Tutorial</option>
+              <option value="Blog">Blog</option>
+              <option value="guide">How-to Guide</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="d-flex flex-column flex-2xl-row gap-2">
+          <button id="btnGenerate" type="button" class="mb-1 btn btn-primary">
+            <span class="spinner-border spinner-border-sm me-2 d-none" role="status" aria-hidden="true"></span>
+            <span class="bi bi-stars me-2"></span>
+            Generate Content
+          </button>
+          <!-- <button id="btnIdeas" type="button" class="mb-1 btn btn-outline-primary">
+            <span class="bi bi-lightbulb me-2"></span>
+            Get Ideas
+          </button> -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Blog Form -->
+    <form id="blogForm" action="/blogs" method="post" enctype="multipart/form-data" class="card">
+      <div class="card-body">
+        <!-- Title -->
+        <div class="mb-3">
+          <label class="form-label">Title*</label>
+          <input id="title" name="blog[title]" type="text" class="form-control" placeholder="Enter your blog title..." value="<%= typeof title !== 'undefined' ? title : '' %>" required>
+        </div>
+
+
+        <!-- Category + Tags -->
+        <div class="mb-3">
+          <label class="form-label">Category*</label>
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <select id="category" name="blog[category]" class="form-select" required>
+                <option value="">Select a category</option>
+                <option value="Technology">Technology</option>
+                <option value="Design">Design</option>
+                <option value="Business">Business</option>
+                <option value="Lifestyle">Lifestyle</option>
+                <option value="Health">Health</option>
+                <option value="Travel">Travel</option>
+                <option value="Food">Food</option>
+                <option value="Education">Education</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-6">
+              <input id="tags"  type="text" class="form-control" placeholder="Tags (ai, technology, future)" >
+            </div>
+          </div>
+        </div>
+
+        <!-- Thumbnail -->
+        <div class="mb-3">
+          <label class="form-label">Thumbnail*</label>
+          <input id="thumbnail" name="blog[image]" type="file" class="form-control" accept="image/*" required>
+          <div id="thumbPreviewWrap" class="mt-3 d-none">
+            <img id="thumbPreview" alt="Thumbnail Preview" class="img-thumbnail" style="max-width: 320px;">
+          </div>
+        </div>
+
+        
+
+        <!-- Blog Content (Quill) -->
+        <div class="mb-3">
+          <label class="form-label">Content*</label>
+          <div id="quill-editor"  style="height: 320px; overflow-y: auto;"></div>
+          <!-- Hidden field to submit HTML -->
+          <input type="hidden" id="content" name="blog[description]" value="<%= typeof description !== 'undefined' ? description : 'description' %>">
+        </div>
+
+        <!-- Submit -->
+        <div class="d-grid d-2xl-flex gap-2">
+          <button id="btnPublish" type="submit" class="btn btn-primary mb-1">
+            <span class="spinner-border spinner-border-sm me-2 d-none" role="status" aria-hidden="true"></span>
+            <i class="bi bi-send me-2"></i>
+            Publish Blog
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const formEl = document.getElementById('blogForm');
+    const editorEl = document.getElementById('quill-editor');
+    const hiddenEl = document.getElementById('content');
+     const btnPublish = document.getElementById('btnPublish');
+    const publishSpinner = btnPublish.querySelector(".spinner-border");
+
+    if (!formEl || !editorEl || !hiddenEl) return;
+
+    // Prevent double init: if Quill already attached, skip
+    if (editorEl.__quill) {
+      // Already initialized by another script
+      return;
+    }
+
+    const quill = new Quill('#quill-editor', { theme: 'snow' });
+    // Mark to avoid re-init
+    editorEl.__quill = quill;
+
+    // preload
+    if (hiddenEl.value && hiddenEl.value !== 'description') {
+      quill.root.innerHTML = hiddenEl.value;
+    }
+
+    quill.on('text-change', function () {
+      hiddenEl.value = editorEl.querySelector('.ql-editor').innerHTML;
+    });
+    formEl.addEventListener('submit', function () {
+      hiddenEl.value = editorEl.querySelector('.ql-editor').innerHTML;
+
+       // Show spinner + disable publish btn
+      publishSpinner.classList.remove("d-none");
+      btnPublish.disabled = true;
+    });
+  });
+</script>
+
+
+
+
+
+<script>
+  // Initial AI mode from server (optional)
+  const initialAi = <%= typeof isAiMode !== 'undefined' && isAiMode ? 'true' : 'false' %>;
+  const aiPanel = document.getElementById('ai-panel');
+  const btnManual = document.getElementById('mode-manual');
+  const btnAi = document.getElementById('mode-ai');
+
+  function setMode(ai) {
+    if (ai) {
+      aiPanel.classList.remove('d-none');
+      btnAi.classList.add('border-primary', 'bg-light');
+      btnManual.classList.remove('border-primary', 'bg-light');
+    } else {
+      aiPanel.classList.add('d-none');
+      btnManual.classList.add('border-primary', 'bg-light');
+      btnAi.classList.remove('border-primary', 'bg-light');
+    }
+  }
+  btnManual.addEventListener('click', () => setMode(false));
+  btnAi.addEventListener('click', () => setMode(true));
+  setMode(initialAi);
+</script>
+
+<script>
+  const btnGenerate = document.getElementById("btnGenerate");
+const spinner = btnGenerate.querySelector(".spinner-border");
+const quillEditor = document.getElementById("quill-editor").__quill;
+
+
+  btnGenerate.addEventListener("click", async () => {
+  const prompt = document.getElementById("aiPrompt").value.trim();
+  const tone = document.getElementById("aiTone").value;
+  const length = document.getElementById("aiLength").value;
+  const format = document.getElementById("aiFormat").value;
+
+  if (!prompt) {
+    alert("Please enter a topic or idea first!");
+    return;
+  }
+
+  spinner.classList.remove("d-none");
+  btnGenerate.disabled = true;
+
+  try {
+    const res = await fetch("/blogs/ai/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt, tone, length, format }),
+    });
+
+    const data = await res.json();
+
+    if (data.success && data.content) {
+      // Fill Quill editor
+      const quillEditor = document.getElementById("quill-editor").__quill;
+      quillEditor.root.innerHTML = data.content;
+      document.getElementById("content").value = data.content;
+    } else {
+      alert("No content generated. Try again.");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Error generating content.");
+  } finally {
+    spinner.classList.add("d-none");
+    btnGenerate.disabled = false;
+  }
+});
+
+</script>
+
+
+
+
+
+
