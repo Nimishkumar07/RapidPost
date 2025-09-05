@@ -171,6 +171,12 @@ follow/unfollow
          <i class="fa-regular fa-clock me-2"></i>
           5 min read
         </span>
+        <span class="d-inline-flex align-items-center ms-auto">
+          <button id="readAloudBtn" type="button" class="btnn-decore btn-link text-muted text-decoration-none p-0 d-inline-flex align-items-center">
+            <i class="fa-solid fa-volume-high me-2"></i> Read Aloud
+          </button>
+        </span>
+
       </div>
     </header>
 
@@ -300,5 +306,39 @@ follow/unfollow
       });
   });
 </script>
+
+<!-- Read Aloud Button -->
+<script>
+  const readBtn = document.getElementById("readAloudBtn");
+  let isReading = false;
+  let utterance;
+
+  readBtn.addEventListener("click", () => {
+    const content = document.querySelector(".rich-text").innerText; // blog body
+    if (!content) return;
+
+    if (!isReading) {
+      utterance = new SpeechSynthesisUtterance(content);
+      utterance.lang = "en-IN"; // adjust language
+      utterance.rate = 1; // 0.5 (slower) to 2 (faster)
+      utterance.pitch = 1;
+
+      // when finished
+      utterance.onend = () => {
+        isReading = false;
+        readBtn.innerHTML = '<i class="fa-solid fa-volume-high me-2"></i> Read Aloud';
+      };
+
+      speechSynthesis.speak(utterance);
+      isReading = true;
+      readBtn.innerHTML = '<i class="fa-solid fa-stop me-2"></i> Stop Reading';
+    } else {
+      speechSynthesis.cancel(); // stop reading
+      isReading = false;
+      readBtn.innerHTML = '<i class="fa-solid fa-volume-high me-2"></i> Read Aloud';
+    }
+  });
+</script>
+
 
 </body>
