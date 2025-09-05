@@ -6,7 +6,14 @@ import wrapAsync from "./utils/wrapAsync.js"
 
 export const isLoggedIn = (req,res,next)=>{
     if(!req.isAuthenticated()){
-        req.session.redirectUrl = req.originalUrl
+        // If it's a like/save/follow route, redirect back to the blog page instead
+        if (req.originalUrl.includes("/likes")) {
+            const blogId = req.params.id;
+            req.session.redirectUrl = `/blogs/${blogId}`;
+        } else {
+            req.session.redirectUrl = req.originalUrl;
+        }
+
         req.flash("error","you must be loggedIn")
         return res.redirect("/login")
     }

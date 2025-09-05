@@ -56,7 +56,7 @@
         </span>
         <span class="d-inline-flex align-items-center ms-auto">
           <button id="readAloudBtn" type="button" class="btnn-decore btn-link text-muted text-decoration-none p-0 d-inline-flex align-items-center">
-            <i class="fa-solid fa-volume-high me-2"></i> Read Aloud
+            <i id="readAloudIcon" class="fa-solid fa-volume-high me-2"></i> <span id="readAloudText">Read Aloud</span>
           </button>
         </span>
 
@@ -81,14 +81,12 @@
       <div class="d-flex align-items-center gap-3">
         <form action="/blogs/<%= blog._id %>/likes" method="post" class="m-0">
           <button type="submit" class=" btnn-decore  btn-link text-decoration-none text-muted p-0 d-inline-flex align-items-center">
-            <% if (blog && blog.likes && blog.likes.includes(user._id.toString())) { %>
-              <i class="fa-solid fa-heart me-2" style="color: red;"></i>  
-              
-              <% } else { %>
-                <i class="fa-regular fa-heart me-2"></i>
-               
-              <% } %>
-           
+            <% if (currUser && blog.likes.includes(currUser._id.toString())) { %>
+              <i class="fa-solid fa-heart me-2" style="color: red;"></i>
+            <% } else { %>
+              <i class="fa-regular fa-heart me-2"></i>
+            <% } %>
+
             <span><%= typeof blog.likes === 'number' ? blog.likes : (blog.likes && blog.likes.length) || 0 %></span>
           </button>
         </form>
@@ -102,19 +100,18 @@
           <i class="fa-solid fa-share-nodes me-2"></i>
           Share
         </button>
-        <% if (blog.author._id.toString() !== currUser._id.toString()) { %>
-        <form action="/blogs/<%= blog._id %>/save" method="post" class="m-0">
-          <button type="submit" class="btnn-decore btn-link text-muted text-decoration-none p-0 d-inline-flex align-items-center">
-             <% if (user && user.savedBlogs && user.savedBlogs.includes(blog._id.toString())) { %>
-              <i class="fa-solid fa-bookmark me-2" ></i>  
-              Unsave
+       <% if (currUser && blog.author._id.toString() !== currUser._id.toString()) { %>
+          <form action="/blogs/<%= blog._id %>/save" method="post">
+            <button class="btnn-decore btn-link text-muted text-decoration-none p-0 d-inline-flex align-items-center">
+              <% if (user && user.savedBlogs && user.savedBlogs.includes(blog._id.toString())) { %>
+                <i class="fa-solid fa-bookmark me-2" ></i> Unsave
               <% } else { %>
-                <i class="fa-regular fa-bookmark me-2"></i>
-                Save
+                <i class="fa-regular fa-bookmark me-2" ></i> Save
               <% } %>
-          </button>
-        </form>
+            </button>
+          </form>
         <% } %>
+
       </div>
     </div>
 
@@ -160,7 +157,7 @@
               <div class="position-relative end-0 bottom-0 pe-3 pb-2 text-muted small">
                  <% if(currUser && currUser._id.equals(review.author._id)) { %>
                     <form method="post" action="/blogs/<%= blog._id %>/reviews/<%= review._id %>?_method=DELETE">
-                        <button style="background-color: rgb(211, 77, 77); color: aliceblue;">Delete</button>
+                        <button  style="background-color: rgb(211, 77, 77); color: aliceblue;">Delete</button>
                     </form>
                     <% } %>
               </div>
@@ -192,36 +189,83 @@
 
 <!-- Read Aloud Button -->
 <script>
-  const readBtn = document.getElementById("readAloudBtn");
-  let isReading = false;
-  let utterance;
-
-  readBtn.addEventListener("click", () => {
-    const content = document.querySelector(".rich-text").innerText; // blog body
-    if (!content) return;
-
-    if (!isReading) {
-      utterance = new SpeechSynthesisUtterance(content);
-      utterance.lang = "en-IN"; // adjust language
-      utterance.rate = 1; // 0.5 (slower) to 2 (faster)
-      utterance.pitch = 1;
-
-      // when finished
-      utterance.onend = () => {
-        isReading = false;
-        readBtn.innerHTML = '<i class="fa-solid fa-volume-high me-2"></i> Read Aloud';
-      };
-
-      speechSynthesis.speak(utterance);
-      isReading = true;
-      readBtn.innerHTML = '<i class="fa-solid fa-stop me-2"></i> Stop Reading';
-    } else {
-      speechSynthesis.cancel(); // stop reading
-      isReading = false;
-      readBtn.innerHTML = '<i class="fa-solid fa-volume-high me-2"></i> Read Aloud';
-    }
+  document.getElementById("shareBtn").addEventListener("click", () => {
+    navigator.clipboard.writeText(window.location.href)
+      .then(() => {
+        alert("Link copied to clipboard!");
+      })
+      .catch(err => {
+        console.error("Failed to copy: ", err);
+      });
   });
 </script>
 
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const readAloudButton = document.getElementById('readAloudBtn');
+    const readAloudIcon = document.getElementById('readAloudIcon');
+    const readAloudText = document.getElementById('readAloudText');
+    const blogContent = document.querySelector('.rich-text');
+
+    // Check if the browser supports the Speech Synthesis API
+    if (!('speechSynthesis' in window)) {
+      readAloudButton.style.display = 'none'; // Hide button if not supported
+      return;
+    }
+
+    let utterance = null;
+
+    function resetUI() {
+      readAloudIcon.className = 'fa-solid fa-volume-high me-2';
+      readAloudText.textContent = 'Read Aloud';
+    }
+
+    readAloudButton.addEventListener('click', () => {
+      // If currently speaking, stop it
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+        resetUI();
+        return;
+      }
+      
+      // If there's no text, do nothing
+      if (!blogContent || !blogContent.textContent.trim()) {
+          alert('No content to read.');
+          return;
+      }
+
+      // Create a new speech request
+      const textToSpeak = blogContent.textContent;
+      utterance = new SpeechSynthesisUtterance(textToSpeak);
+
+      // When speech ends naturally, reset the button UI
+      utterance.onend = () => {
+        resetUI();
+      };
+
+      // If an error occurs, log it and reset UI
+      utterance.onerror = (event) => {
+        console.error('SpeechSynthesisUtterance.onerror', event);
+        resetUI();
+      };
+
+      // Start speaking
+      window.speechSynthesis.speak(utterance);
+
+      // Update the button UI to show "Stop"
+      readAloudIcon.className = 'fa-solid fa-stop me-2';
+      readAloudText.textContent = 'Stop Reading';
+    });
+
+    // Optional: Ensure speech is cancelled if the user navigates away
+    window.addEventListener('beforeunload', () => {
+        if (window.speechSynthesis.speaking) {
+            window.speechSynthesis.cancel();
+        }
+    });
+  });
+</script>
+
+</body>
 
 </body>
