@@ -18,6 +18,7 @@ RapidPost is the next-generation blogging platform powered by AI. Create, discov
 - 📱 Responsive Bootstrap 5 UI with modern design
 - 🧑‍💻 Powered by Node.js, Express, EJS, and MongoDB
 - 📱 Intractive Social features: likes,reviews,follow 
+- 🔊 Read Aloud: Listen to blog posts with the integrated text-to-speech feature
 
 ## Technologies Used
 
@@ -75,6 +76,7 @@ RapidPost is the next-generation blogging platform powered by AI. Create, discov
 - **Edit & Manage:** Edit or delete your blogs from the dashboard.
 - **Profile:** Manage your user profile and settings.
 - **Intractive Social features:** likes,reviews,follow 
+- **Read Aloud:** Click the “Read Aloud” button on any blog post to have it spoken aloud.
 
 ## Support & Links
 
