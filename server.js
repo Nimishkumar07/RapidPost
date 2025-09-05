@@ -1,5 +1,5 @@
 if(process.env.NODE_ENV != "production"){
-    require("dotenv").config()
+   'dotenv/config'
 }
 
 import express from'express'
@@ -44,7 +44,7 @@ async function main() {
     // Simulate __dirname for ES Modules
         import { fileURLToPath } from 'url';
         import { dirname } from 'path';
-import { render } from 'ejs'
+        import { render } from 'ejs'
         const __filename = fileURLToPath(import.meta.url);
         const __dirname = dirname(__filename);
 
