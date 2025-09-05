@@ -72,10 +72,9 @@ RapidPost is the next-generation blogging platform powered by AI. Create, discov
 
 ## Support & Links
 
-- [Help Center](/help)
-- [Contact Us](/contact)
-- [Privacy Policy](/privacy)
-- [Terms of Service](/terms)
+
+- [Contact Us](https://www.linkedin.com/in/nimishkumar07/)
+
 
 ---
 
