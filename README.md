@@ -17,6 +17,7 @@ RapidPost is the next-generation blogging platform powered by AI. Create, discov
 - 📋 Dashboard, blog management, and seamless publishing
 - 📱 Responsive Bootstrap 5 UI with modern design
 - 🧑‍💻 Powered by Node.js, Express, EJS, and MongoDB
+- 📱 Intractive Social features: likes,reviews,follow 
 
 ## Technologies Used
 
@@ -26,6 +27,7 @@ RapidPost is the next-generation blogging platform powered by AI. Create, discov
 - Bootstrap 5 & custom CSS
 - Cloudinary image hosting
 - Gemini AI for content generation
+- Architecture: Model-View-Controller (MVC)
 
 ## Getting Started
 
@@ -48,6 +50,7 @@ RapidPost is the next-generation blogging platform powered by AI. Create, discov
      CLOUD_NAME=your_cloudinary_cloud_name
      CLOUD_API_KEY=your_cloudinary_api_key
      CLOUD_API_SECRET=your_cloudinary_api_secret
+     SESSION_SECRET=your_session_secret
      ```
 
 4. **Start the server:**
@@ -65,6 +68,7 @@ RapidPost is the next-generation blogging platform powered by AI. Create, discov
 - **AI Generation:** Enter a topic, select tone, length, and format, then click "Generate Content".
 - **Edit & Manage:** Edit or delete your blogs from the dashboard.
 - **Profile:** Manage your user profile and settings.
+- **Intractive Social features:** likes,reviews,follow 
 
 ## Support & Links
 
