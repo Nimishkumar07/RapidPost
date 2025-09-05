@@ -61,6 +61,12 @@ RapidPost is the next-generation blogging platform powered by AI. Create, discov
 5. **Visit the platform:**
    Open [http://localhost:3000/blogs](http://localhost:3000/blogs) in your browser.
 
+## Deployment
+
+- Deployed on [Render](https://render.com/)
+- Database hosted with MongoDB Atlas
+
+  
 ## Usage
 
 - **Browse Blogs:** See all published blogs on the home page.
