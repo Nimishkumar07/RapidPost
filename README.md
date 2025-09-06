@@ -60,7 +60,7 @@ RapidPost is the next-generation blogging platform powered by AI. Create, discov
    ```
 
 5. **Visit the platform:**
-   Open [http://localhost:3000/blogs](http://localhost:3000/blogs) in your browser.
+   Open [http://localhost:8080/blogs](http://localhost:8080/blogs) in your browser.
 
 ## Deployment
 
