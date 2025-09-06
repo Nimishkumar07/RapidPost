@@ -208,65 +208,84 @@
     const readAloudText = document.getElementById('readAloudText');
     const blogContent = document.querySelector('.rich-text');
 
-    // Check if the browser supports the Speech Synthesis API
     if (!('speechSynthesis' in window)) {
-      readAloudButton.style.display = 'none'; // Hide button if not supported
+      readAloudButton.style.display = 'none';
       return;
     }
 
-    let utterance = null;
+    let isReading = false;
 
     function resetUI() {
       readAloudIcon.className = 'fa-solid fa-volume-high me-2';
       readAloudText.textContent = 'Read';
+      isReading = false;
+    }
+
+    function speakText(text) {
+      // Break into chunks (≈200 characters each, avoids cutoff on mobile)
+      const chunkSize = 200;
+      const chunks = [];
+      for (let i = 0; i < text.length; i += chunkSize) {
+        chunks.push(text.slice(i, i + chunkSize));
+      }
+
+      let currentChunk = 0;
+
+      function speakNextChunk() {
+        if (currentChunk >= chunks.length) {
+          resetUI();
+          return;
+        }
+
+        const utterance = new SpeechSynthesisUtterance(chunks[currentChunk]);
+        utterance.lang = "en-IN"; // Adjust if needed
+        utterance.rate = 1;
+
+        utterance.onend = () => {
+          currentChunk++;
+          speakNextChunk();
+        };
+
+        utterance.onerror = (event) => {
+          console.error("Speech synthesis error:", event);
+          resetUI();
+        };
+
+        window.speechSynthesis.speak(utterance);
+      }
+
+      speakNextChunk();
     }
 
     readAloudButton.addEventListener('click', () => {
-      // If currently speaking, stop it
-      if (window.speechSynthesis.speaking) {
+      if (isReading) {
         window.speechSynthesis.cancel();
         resetUI();
         return;
       }
-      
-      // If there's no text, do nothing
+
       if (!blogContent || !blogContent.textContent.trim()) {
-          alert('No content to read.');
-          return;
+        alert('No content to read.');
+        return;
       }
 
-      // Create a new speech request
+      window.speechSynthesis.cancel(); // stop any previous
+      isReading = true;
+
       const textToSpeak = blogContent.textContent;
-      utterance = new SpeechSynthesisUtterance(textToSpeak);
+      speakText(textToSpeak);
 
-      // When speech ends naturally, reset the button UI
-      utterance.onend = () => {
-        resetUI();
-      };
-
-      // If an error occurs, log it and reset UI
-      utterance.onerror = (event) => {
-        console.error('SpeechSynthesisUtterance.onerror', event);
-        resetUI();
-      };
-
-      // Start speaking
-      window.speechSynthesis.speak(utterance);
-
-      // Update the button UI to show "Stop"
       readAloudIcon.className = 'fa-solid fa-stop me-2';
       readAloudText.textContent = 'Stop';
     });
 
-    // Optional: Ensure speech is cancelled if the user navigates away
     window.addEventListener('beforeunload', () => {
-        if (window.speechSynthesis.speaking) {
-            window.speechSynthesis.cancel();
-        }
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+      }
     });
   });
 </script>
 
-</body>
 
 </body>
