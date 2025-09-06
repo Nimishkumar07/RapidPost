@@ -5,7 +5,7 @@ import main from "../gemini.js"
 //index route
 export const index = async(req,res)=>{
     const allBlogs = await Blog.find({}).populate("author")
-    // res.json({success: true, allBlogs})
+   
     res.render("blogs/index",{allBlogs})
 }
 

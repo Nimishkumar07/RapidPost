@@ -56,7 +56,7 @@
         </span>
         <span class="d-inline-flex align-items-center ms-auto">
           <button id="readAloudBtn" type="button" class="btnn-decore btn-link text-muted text-decoration-none p-0 d-inline-flex align-items-center">
-            <i id="readAloudIcon" class="fa-solid fa-volume-high me-2"></i> <span id="readAloudText">Read Aloud</span>
+            <i id="readAloudIcon" class="fa-solid fa-volume-high me-2"></i> <span id="readAloudText">Read</span>
           </button>
         </span>
 
@@ -217,7 +217,7 @@
 
     function resetUI() {
       readAloudIcon.className = 'fa-solid fa-volume-high me-2';
-      readAloudText.textContent = 'Read Aloud';
+      readAloudText.textContent = 'Read';
     }
 
     readAloudButton.addEventListener('click', () => {
@@ -254,7 +254,7 @@
 
       // Update the button UI to show "Stop"
       readAloudIcon.className = 'fa-solid fa-stop me-2';
-      readAloudText.textContent = 'Stop Reading';
+      readAloudText.textContent = 'Stop';
     });
 
     // Optional: Ensure speech is cancelled if the user navigates away
