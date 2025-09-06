@@ -119,9 +119,6 @@ app.use("/", savedRouter);
 app.use("/users",followRouter)
 app.use("/blogs",blogRouter)
 
-app.get("/test",(req,res)=>{
-    res.render("blogs/test")
-})
 
 app.use((err,req,res,next)=>{
     let {statusCode=404,message="Something went wrong"} = err
