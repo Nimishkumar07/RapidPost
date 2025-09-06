@@ -1,7 +1,7 @@
 import User from "../models/user.js";
 
 export const renderSignUpForm = (req,res)=>{
-    res.render("users/signup")
+    res.render("users/login")
 }
 
 export const SignUp = async(req,res)=>{
