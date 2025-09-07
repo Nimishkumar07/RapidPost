@@ -26,6 +26,7 @@ RapidPost is the next-generation blogging platform powered by AI. Create, discov
 - MongoDB (via Mongoose)
 - Passport.js for authentication
 - Bootstrap 5 & custom CSS
+- Quill Rich Text editor
 - Cloudinary image hosting
 - Gemini AI for content generation
 - Architecture: Model-View-Controller (MVC)
