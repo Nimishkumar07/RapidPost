@@ -107,7 +107,9 @@ export const updateProfile = async (req,res)=>{
         throw new ExpressError(400,"Send a valid data for user")
     }
     let {id} = req.params
-    let user = await User.findByIdAndUpdate(id, {...req.body.user})
+    let user = await User.findByIdAndUpdate(id, {...req.body.user, socialLinks: { ...req.body.socialLinks } 
+    },{ new: true }
+  )
  
     if(typeof req.file !== "undefined"){
         let url = req.file.path
