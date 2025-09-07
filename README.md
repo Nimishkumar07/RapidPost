@@ -78,6 +78,36 @@ RapidPost is the next-generation blogging platform powered by AI. Create, discov
 - **Intractive Social features:** likes,reviews,follow 
 - **Read Aloud:** Click the “Read Aloud” button on any blog post to have it spoken aloud.
 
+## Complete Endpoint Reference
+
+### Blog Management
+- `GET /blogs` - List all blogs (index)
+- `GET /blogs/new` - Show blog creation form (renderNewForm)
+- `POST /blogs` - Create new blog (createBlog)
+- `GET /blogs/:id` - Show individual blog (showBlog)
+- `GET /blogs/:id/edit` - Show blog edit form (renderEditForm)
+- `PUT /blogs/:id` - Update blog (updateBlog)
+- `DELETE /blogs/:id` - Delete blog (destroyBlog)
+- `POST /blogs/ai/generate` - AI content generation (generateBlog)
+
+### User Authentication
+- `GET /signup` - Show registration form (renderSignUpForm)
+- `POST /signup` - Register user (SignUp)
+- `GET /login` - Show login form (renderLogInForm)
+- `POST /login` - Authenticate user (logIn)
+- `GET /logout` - Log out user (logOut)
+
+### Social Features
+- `POST users/:id/follow` - Toggle follow user (toggleFollow)
+- `GET users/:id` - View user profile (getProfile)
+- `GET users/:id/edit` - Edit profile form (renderProfileEditForm)
+- `PUT users/:id` - Update profile (updateProfile)
+- `POST blogs/:id/likes` - Toggle blog like (toggleLike)
+- `GET /blogs/saved` - List saved blogs (getSavedBlogs)
+- `POST /blogs/:id/save` - Toggle save blog (toggleSaveBlog)
+- `POST /blogs/:id/reviews` - Create review (createReview)
+- `DELETE /blogs/:id/reviews/:reviewId` - Delete review (destroyReview)
+
 ## Support & Links
 
 
