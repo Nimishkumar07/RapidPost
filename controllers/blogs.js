@@ -102,6 +102,7 @@ export const destroyBlog = async(req,res)=>{
     res.redirect("/blogs")
 }
 
+// generate with ai
 export const generateBlog = async(req,res)=>{
     const { prompt, tone, length, format } = req.body;
 

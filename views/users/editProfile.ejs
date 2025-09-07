@@ -8,7 +8,7 @@
   </div>
 
   <!-- Form -->
-  <form id="editProfileForm" action="/users/<%= currUser._id %>?_method=PUT" method="post" class="bg-white border rounded-3 p-4 shadow-sm" enctype="multipart/form-data">
+  <form id="editProfileForm" action="/users/<%= currUser._id %>?_method=PUT" method="post" class="bg-white border rounded-3 p-4 shadow-sm needs-validation" enctype="multipart/form-data" novalidate>
     <!-- Two column inputs -->
     <div class="row g-3">
       <div class="col-12 col-lg-6">
@@ -21,6 +21,7 @@
           required
           class="form-control"
         />
+        <div class="invalid-feedback">Please provide your full name</div>
       </div>
 
       <div class="col-12 col-lg-6">
@@ -33,6 +34,7 @@
           required
           class="form-control"
         />
+        <div class="invalid-feedback">Please provide a username</div>
         <div class="form-text">This will be the public handle</div>
       </div>
 
@@ -46,6 +48,7 @@
           required
           class="form-control"
         />
+        <div class="invalid-feedback">Please provide a valid email address</div>
       </div>
 
       <div class="col-12 col-lg-6">
@@ -154,10 +157,23 @@
     const saveBtn = document.getElementById('saveBtn');
     if (!form || !saveBtn) return;
 
-    form.addEventListener('submit', function () {
-      // mimic isLoading
-      saveBtn.disabled = true;
-      saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Saving...';
+    form.addEventListener('submit', function (e) {
+      if (!form.checkValidity()) {
+        // Form invalid -> stop submit + reset button
+        e.preventDefault();
+        e.stopPropagation();
+
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = 'Save Changes';
+      } else {
+        // Form valid -> show loading state
+        saveBtn.disabled = true;
+        saveBtn.innerHTML =
+          '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Saving...';
+      }
+
+      // Bootstrap validation UI
+      form.classList.add('was-validated');
     });
   })();
 </script>

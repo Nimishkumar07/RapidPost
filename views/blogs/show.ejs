@@ -175,19 +175,7 @@
   </div>
 </div>
 
-<script>
-  document.getElementById("shareBtn").addEventListener("click", () => {
-    navigator.clipboard.writeText(window.location.href)
-      .then(() => {
-        alert("Link copied to clipboard!");
-      })
-      .catch(err => {
-        console.error("Failed to copy: ", err);
-      });
-  });
-</script>
-
-
+<!-- Share Button Script -->
 <script>
   document.getElementById("shareBtn").addEventListener("click", () => {
     navigator.clipboard.writeText(window.location.href)

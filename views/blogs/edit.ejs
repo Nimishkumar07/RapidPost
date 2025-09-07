@@ -13,12 +13,14 @@
    
 
     <!-- Blog Form -->
-    <form id="blogForm" action="/blogs/<%= blog._id %>?_method=PUT" method="post" enctype="multipart/form-data" class="card">
+    <form id="blogForm"action="/blogs/<%= blog._id %>?_method=PUT" method="post" enctype="multipart/form-data" class="card needs-validation" novalidate>
       <div class="card-body">
         <!-- Title -->
         <div class="mb-3">
           <label class="form-label">Title*</label>
           <input id="title" name="blog[title]" type="text" class="form-control" placeholder="Enter your blog title..." value="<%= blog.title %>" required>
+          <div class="valid-feedback">Title looks Good!</div>
+          <div class="invalid-feedback">Please provide a title</div>
         </div>
 
 
@@ -38,6 +40,7 @@
                 <option value="Food">Food</option>
                 <option value="Education">Education</option>
               </select>
+              <div class="invalid-feedback">Please select a category</div>
             </div>
             <div class="col-12 col-md-6">
               <input id="tags"  type="text" class="form-control" placeholder="Tags (ai, technology, future)" >
@@ -64,7 +67,8 @@
           <label class="form-label">Content*</label>
           <div id="quill-editor"  style="height: 320px; overflow-y: auto;"></div>
           <!-- Hidden field to submit HTML -->
-          <input type="hidden" id="content" name="blog[description]" value="<%= blog.description %>">
+          <input type="hidden" id="content" name="blog[description]" value="<%= blog.description %>" required>
+          <div class="invalid-feedback">Please provide blog content</div>
         </div>
 
         <!-- Submit -->
@@ -72,7 +76,7 @@
           <button id="btnPublish" type="submit" class="btn btn-primary mb-1">
             <span class="spinner-border spinner-border-sm me-2 d-none" role="status" aria-hidden="true"></span>
             <i class="bi bi-send me-2"></i>
-            Publish Blog
+            Update Blog
           </button>
         </div>
       </div>

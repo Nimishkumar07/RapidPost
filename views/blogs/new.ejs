@@ -42,7 +42,7 @@
 
         <div class="mb-3">
           <label class="form-label">What would you like to write about?</label>
-          <textarea id="aiPrompt" rows="3" class="form-control" placeholder="Topic, idea, or brief..." required></textarea>
+          <textarea id="aiPrompt" rows="3" class="form-control" placeholder="Topic, idea, or brief..." required ></textarea>
         </div>
 
         <div class="row g-3 mb-3">
@@ -90,12 +90,14 @@
     </div>
 
     <!-- Blog Form -->
-    <form id="blogForm" action="/blogs" method="post" enctype="multipart/form-data" class="card">
+    <form id="blogForm" action="/blogs" method="post" enctype="multipart/form-data" class="card needs-validation" novalidate>
       <div class="card-body">
         <!-- Title -->
         <div class="mb-3">
           <label class="form-label">Title*</label>
           <input id="title" name="blog[title]" type="text" class="form-control" placeholder="Enter your blog title..." value="<%= typeof title !== 'undefined' ? title : '' %>" required>
+          <div class="valid-feedback">Title looks Good!</div>
+          <div class="invalid-feedback">Please provide a title</div>
         </div>
 
 
@@ -115,6 +117,7 @@
                 <option value="Food">Food</option>
                 <option value="Education">Education</option>
               </select>
+              <div class="invalid-feedback">Please select a category</div>
             </div>
             <div class="col-12 col-md-6">
               <input id="tags"  type="text" class="form-control" placeholder="Tags (ai, technology, future)" >
@@ -138,7 +141,8 @@
           <label class="form-label">Content*</label>
           <div id="quill-editor"  style="height: 320px; overflow-y: auto;"></div>
           <!-- Hidden field to submit HTML -->
-          <input type="hidden" id="content" name="blog[description]" value="<%= typeof description !== 'undefined' ? description : 'description' %>">
+          <input type="hidden" id="content" name="blog[description]" value="<%= typeof description !== 'undefined' ? description : 'description' %>" required>
+          <div class="invalid-feedback">Please provide blog content</div>
         </div>
 
         <!-- Submit -->
@@ -184,13 +188,30 @@
     quill.on('text-change', function () {
       hiddenEl.value = editorEl.querySelector('.ql-editor').innerHTML;
     });
-    formEl.addEventListener('submit', function () {
-      hiddenEl.value = editorEl.querySelector('.ql-editor').innerHTML;
 
-       // Show spinner + disable publish btn
-      publishSpinner.classList.remove("d-none");
-      btnPublish.disabled = true;
-    });
+    formEl.addEventListener('submit', function (e) {
+  // Prevent default submit first
+  if (!formEl.checkValidity()) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Reset publish button state if invalid
+    btnPublish.innerHTML = '<i class="bi bi-send me-2"></i> Publish Blog';
+    btnPublish.disabled = false;
+  } else {
+    // Update hidden content field
+    hiddenEl.value = editorEl.querySelector('.ql-editor').innerHTML;
+
+    // Show spinner + disable publish btn
+    btnPublish.innerHTML =
+      '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Publishing...';
+    btnPublish.disabled = true;
+  }
+
+  // Add bootstrap validation UI
+  formEl.classList.add('was-validated');
+});
+
   });
 </script>
 
@@ -238,7 +259,7 @@ const quillEditor = document.getElementById("quill-editor").__quill;
     return;
   }
 
-  spinner.classList.remove("d-none");
+  btnGenerate.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Generating...';
   btnGenerate.disabled = true;
 
   try {
