@@ -1,18 +1,5 @@
 <% layout("layouts/boilerplate") %>
 
-<!-- <h2><%= user.username %>'s Profile</h2>
-<p>Followers: <%= followersCount %></p>
-<p>Following: <%= followingCount %></p>
-
-<form action="/users/<%= user._id %>/follow" method="POST">
-  <button>
-    <% if (currentUser && currentUser.following.includes(user._id)) { %>
-      Unfollow
-    <% } else { %>
-      Follow
-    <% } %>
-  </button>
-</form> -->
 
 <%
   const p = user;
@@ -60,16 +47,16 @@
 
         <div class="d-flex gap-2 mt-4">
           
-            <a href="<%= p.socialLinks.twitter %>" class=" btn-light btn-sm rounded-circle" title="Twitter"><i class="fa-brands fa-x-twitter fa-xl"></i><a>
+            <a href="<%= p.socialLinks.twitter %>" target="_blank" class=" btn-light btn-sm rounded-circle" title="Twitter"><i class="fa-brands fa-x-twitter fa-xl"></i><a>
           
 
-            <a href="<%= p.socialLinks.linkedin %>" class=" btn-light btn-sm rounded-circle" title="LinkedIn"><i class="fa-brands fa-linkedin fa-xl me-2"></i></a>
+            <a href="<%= p.socialLinks.linkedin %>" target="_blank" class=" btn-light btn-sm rounded-circle" title="LinkedIn"><i class="fa-brands fa-linkedin fa-xl me-2"></i></a>
          
           
-            <a href="<%= p.socialLinks.github %>" class=" btn-light btn-sm rounded-circle" title="GitHub"><i class="fa-brands fa-square-github fa-xl me-2"></i></a>
+            <a href="<%= p.socialLinks.github %>" target="_blank" class=" btn-light btn-sm rounded-circle" title="GitHub"><i class="fa-brands fa-square-github fa-xl me-2"></i></a>
         
           
-            <a href="<%= p.socialLinks.instagram %>" class=" btn-light btn-sm rounded-circle" title="Website"><i class="fa-brands fa-square-instagram fa-xl me-2"></i></a>
+            <a href="<%= p.socialLinks.instagram %>" target="_blank" class=" btn-light btn-sm rounded-circle" title="Website"><i class="fa-brands fa-square-instagram fa-xl me-2"></i></a>
           
         </div>
 
