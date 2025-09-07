@@ -156,3 +156,9 @@ body{
     scale: 1.01 !important;
     transition: all 0.3s ease-in-out !important;
 }
+
+@media (max-width:468px) {
+    .read{
+        display: none !important;
+    }
+}
