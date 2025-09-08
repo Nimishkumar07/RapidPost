@@ -52,8 +52,8 @@ export const getProfile = async (req, res) => {
     .populate({
       path: "blogs",
       populate: [
-        { path: "reviews" }, // so we can count comments
-        { path: "likes" }    // so we can count likes
+        { path: "reviews" }, // to count comments
+        { path: "likes" }    // to count likes
       ]
     })
     .populate("savedBlogs")
@@ -63,7 +63,7 @@ export const getProfile = async (req, res) => {
     return res.redirect("back");
   }
 
-    // ---- Analytics ----
+    // Analytics 
   let totalViews = 0;
   let totalLikes = 0;
   let totalComments = 0;

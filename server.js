@@ -41,7 +41,7 @@ async function main() {
     await mongoose.connect(dbUrl)
 }
 
-    // Simulate __dirname for ES Modules
+    
         import { fileURLToPath } from 'url';
         import { dirname } from 'path';
         import { render } from 'ejs'

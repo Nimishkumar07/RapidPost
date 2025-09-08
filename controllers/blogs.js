@@ -5,7 +5,7 @@ import main from "../gemini.js"
 //index route
 export const index = async(req,res)=>{
 
-     const { q, category } = req.query;  // read query params
+     const { q, category } = req.query;  
      let filter = {};
 
   // Search filter
@@ -21,10 +21,10 @@ export const index = async(req,res)=>{
     filter.category = category;
   }
 
-  // Fetch blogs with filter
+ 
   const allBlogs = await Blog.find(filter).populate("author");
 
-   // Get distinct categories (for dynamic buttons/dropdown)
+   // Get all categories for showing in filter option
   const categories = await Blog.distinct("category");
 
   res.render("blogs/index", { allBlogs, q, category, categories });

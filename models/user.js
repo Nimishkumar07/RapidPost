@@ -16,12 +16,12 @@ const userSchema = new Schema({
         unique: true,
         trim: true,
         lowercase: true,
-        match: [/\S+@\S+\.\S+/, 'is invalid'] // Basic email format validation
+        match: [/\S+@\S+\.\S+/, 'is invalid'] 
     },
     avatar: {
         url:{
             type:String,
-            default: 'https://images.unsplash.com/photo-1593085512500-5d55148d6f0d' // A default placeholder image
+            default: 'https://images.unsplash.com/photo-1593085512500-5d55148d6f0d' 
          },
          filename:String,
        
@@ -37,7 +37,7 @@ const userSchema = new Schema({
         github: {type:String, default:''},
         instagram: {type:String, default:''},
     },
-    // Stores the IDs of all blogs created by this user
+    // Stores the id of all blogs created by this user
     blogs: [{
         type: Schema.Types.ObjectId,
         ref: 'Blog'
@@ -46,11 +46,10 @@ const userSchema = new Schema({
         type: Number, 
         default: 0 
     },
-    savedBlogs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Blog" }], // NEW
-    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],  // NEW
+    savedBlogs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Blog" }], 
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }] 
 }, {
-    // Automatically adds createdAt and updatedAt fields
+    
     timestamps: true
 });
 

@@ -163,7 +163,7 @@
               </div>
 
               <div class="position-absolute end-0 bottom-0 pe-3 pb-2 text-muted small">
-                <!-- Humanized time; replace with server-side library like moment if needed -->
+                <!-- Humanized time -->
                 <%= moment(review.createdAt).fromNow() %>
               </div>
             </div>
@@ -210,7 +210,7 @@
     }
 
     function speakText(text) {
-      // Break into chunks (≈200 characters each, avoids cutoff on mobile)
+      // Breaked into chunks of 200 characters each, avoids cutoff on mobile
       const chunkSize = 200;
       const chunks = [];
       for (let i = 0; i < text.length; i += chunkSize) {
@@ -226,7 +226,7 @@
         }
 
         const utterance = new SpeechSynthesisUtterance(chunks[currentChunk]);
-        utterance.lang = "en-IN"; // Adjust if needed
+        utterance.lang = "en-IN"; 
         utterance.rate = 1;
 
         utterance.onend = () => {

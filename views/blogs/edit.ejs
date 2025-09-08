@@ -96,7 +96,7 @@
 
     // Prevent double init: if Quill already attached, skip
     if (editorEl.__quill) {
-      // Already initialized by another script
+      
       return;
     }
 
@@ -123,7 +123,7 @@
 
 
 <script>
-  // Initial AI mode from server (optional)
+  // Initial AI mode from server 
   const initialAi = <%= typeof isAiMode !== 'undefined' && isAiMode ? 'true' : 'false' %>;
   const aiPanel = document.getElementById('ai-panel');
   const btnManual = document.getElementById('mode-manual');
