@@ -4,9 +4,33 @@ import main from "../gemini.js"
 
 //index route
 export const index = async(req,res)=>{
-    const allBlogs = await Blog.find({}).populate("author")
+    // const allBlogs = await Blog.find({}).populate("author")
    
-    res.render("blogs/index",{allBlogs})
+    // res.render("blogs/index",{allBlogs})
+
+     const { q, category } = req.query;  // read query params
+  let filter = {};
+
+  // Search filter
+  if (q) {
+    filter.$or = [
+      { title: { $regex: q, $options: "i" } },        // case-insensitive match in title
+      { description: { $regex: q, $options: "i" } }   // or description
+    ];
+  }
+
+  // Apply category
+  if (category && category !== "All") {
+    filter.category = category;
+  }
+
+  // Fetch blogs with filter
+  const allBlogs = await Blog.find(filter).populate("author");
+
+   // Get distinct categories (for dynamic buttons/dropdown)
+  const categories = await Blog.distinct("category");
+
+  res.render("blogs/index", { allBlogs, q, category, categories });
 }
 
 //new route

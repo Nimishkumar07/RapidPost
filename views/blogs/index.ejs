@@ -3,7 +3,7 @@
 
 <body>
   <div class="position-relative mx-3 mx-sm-5 mx-xl-7">
-    <div class="text-center mt-5 mb-4 ">
+    <div class="text-center mt-5 mb-5 ">
       <div
         class="AI d-inline-flex align-items-center gap-2 px-4 py-1 mb-3 rounded-pill small"
       >
@@ -26,21 +26,31 @@
       </p>
 
       <form
-        action=""
+        id="searchForm"
+        action="/blogs"
         method="GET"
         class="mx-auto"
         style="max-width: 36rem"
       >
         <div class="input-group">
           <input
+            id="searchInput"
             type="text"
             class="form-control"
             name="q"
+            value="<%= typeof q !== 'undefined' ? q : '' %>"
             placeholder="Search for blogs"
             required
           />
           <button class="btn" type="submit">Search</button>
         </div>
+        <button 
+        type="button" 
+        id="clearSearchBtn" 
+        class=" btn-outline-secondary btnn-decore mt-4" 
+        style="display:none;">
+        Clear Search
+      </button>
       </form>
     </div>
 
@@ -48,8 +58,33 @@
        class="position-absolute top-0 start-50 translate-middle-x"
        style="opacity:.5; z-index:-1; max-width:100%;"/> -->
   </div>
+<!-- Category Filter Buttons -->
+  <div class="d-flex  align-items-center justify-content-center gap-2 my-4">
+    <% const activeCategory = typeof category !== 'undefined' ? category : 'All'; %>
+    <a href="/blogs?<%= q ? `q=${q}&` : '' %>category=All" 
+       class=" btnn-decore btn-link text-muted text-decoration-none btn-sm me-2 <%= activeCategory === 'All' ? 'active-category' : '' %>">
+      All
+    </a>
+    
+      <a href="/blogs?<%= q ? `q=${q}&` : '' %>category=Technology " 
+         class="btnn-decore btn-link text-muted text-decoration-none btn-sm me-2 <%= activeCategory === 'Technology' ? 'active-category' : '' %>">
+         Technology 
+      </a>
+      <a href="/blogs?<%= q ? `q=${q}&` : '' %>category=Education " 
+         class="btnn-decore btn-link text-muted text-decoration-none btn-sm me-2 <%= activeCategory === 'Education' ? 'active-category' : '' %>">
+         Education
+      </a>
+      <a href="/blogs?<%= q ? `q=${q}&` : '' %>category=Travel " 
+         class="btnn-decore btn-link text-muted text-decoration-none btn-sm me-2 <%= activeCategory === 'Travel' ? 'active-category' : '' %>">
+         Travel
+      </a>
+      <a href="/blogs?<%= q ? `q=${q}&` : '' %>category=Finance " 
+         class="btnn-decore btn-link text-muted text-decoration-none btn-sm <%= activeCategory === 'Finance' ? 'active-category' : '' %>">
+        Finance
+      </a>
+   
+  </div>
 
-  
   <div class=" mx-auto row row-cols row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-5 mt-3">
     <% for(let blog of allBlogs) { %>
     <div class="col">
@@ -134,3 +169,32 @@
 </div>
 
 
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.getElementById("searchInput");
+    const clearBtn = document.getElementById("clearSearchBtn");
+    const searchForm = document.getElementById("searchForm");
+
+    function toggleClearButton() {
+      clearBtn.style.display = searchInput.value.trim() ? "inline-block" : "none";
+    }
+
+    searchInput.addEventListener("input", toggleClearButton);
+    toggleClearButton();
+
+    // Clear search input and reload without search query
+    clearBtn.addEventListener("click", () => {
+      searchInput.value = "";
+      // Redirect to blogs without search param
+      window.location.href = "/blogs";
+    });
+
+    // If user empties search and submits → reset to /blogs
+    searchForm.addEventListener("submit", (e) => {
+      if (!searchInput.value.trim()) {
+        e.preventDefault();
+        window.location.href = "/blogs";
+      }
+    });
+  });
+</script>

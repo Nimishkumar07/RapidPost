@@ -162,3 +162,11 @@ body{
         display: none !important;
     }
 }
+
+.active-category {
+  background-color: #8200db !important;
+  color: white !important;
+  border-radius: 20px;
+  padding: 4px 12px;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
