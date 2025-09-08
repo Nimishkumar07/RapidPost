@@ -79,7 +79,7 @@
           <button id="btnGenerate" type="button" class="mb-1 btn btn-primary">
             <span class="spinner-border spinner-border-sm me-2 d-none" role="status" aria-hidden="true"></span>
             <span class="bi bi-stars me-2"></span>
-            Generate Content
+           <span class="btn-label">Generate </span>
           </button>
           <!-- <button id="btnIdeas" type="button" class="mb-1 btn btn-outline-primary">
             <span class="bi bi-lightbulb me-2"></span>
@@ -245,6 +245,7 @@
 <script>
   const btnGenerate = document.getElementById("btnGenerate");
 const spinner = btnGenerate.querySelector(".spinner-border");
+const btnLabel = btnGenerate.querySelector(".btn-label");
 const quillEditor = document.getElementById("quill-editor").__quill;
 
 
@@ -259,8 +260,9 @@ const quillEditor = document.getElementById("quill-editor").__quill;
     return;
   }
 
-  btnGenerate.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Generating...';
+   spinner.classList.remove("d-none");
   btnGenerate.disabled = true;
+  btnLabel.textContent = "Generating...";
 
   try {
     const res = await fetch("/blogs/ai/generate", {
@@ -283,8 +285,9 @@ const quillEditor = document.getElementById("quill-editor").__quill;
     console.error(err);
     alert("Error generating content.");
   } finally {
-    spinner.classList.add("d-none");
+ spinner.classList.add("d-none");
     btnGenerate.disabled = false;
+    btnLabel.textContent = "Generate ";
   }
 });
 
