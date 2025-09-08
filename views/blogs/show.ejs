@@ -124,9 +124,10 @@
       <div class="card shadow-sm mb-4">
         <div class="card-body">
           <h4 class="h6 fw-semibold mb-3">Leave a comment</h4>
-          <form action="/blogs/<%= blog._id %>/reviews" method="post">
+          <form action="/blogs/<%= blog._id %>/reviews" method="post" class="needs-validation" novalidate>
             <div class="mb-3">
               <textarea name="review[comment]" rows="4" class="form-control" placeholder="Share your thoughts..." required></textarea>
+              <div class="invalid-feedback">Comment cannot be empty.</div>
             </div>
             <div class="d-flex justify-content-between align-items-center">
               
