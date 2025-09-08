@@ -47,6 +47,7 @@ const userSchema = new Schema({
         default: 0 
     },
     savedBlogs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Blog" }], 
+    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],  
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }] 
 }, {
     
