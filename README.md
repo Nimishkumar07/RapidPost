@@ -18,7 +18,7 @@ RapidPost is the next-generation blogging platform powered by AI. Create, discov
 - 📱 Responsive Bootstrap 5 UI with modern design
 - 🧑‍💻 Powered by Node.js, Express, EJS, and MongoDB
 - ❤️ Intractive Social features: likes,reviews,follow 
-- 💻 Search and Category filter
+- 🔍 Search and Category filter
 - 🔊 Read Aloud: Listen to blog posts with the integrated text-to-speech feature
 
 ## Technologies Used
