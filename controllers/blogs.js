@@ -4,12 +4,9 @@ import main from "../gemini.js"
 
 //index route
 export const index = async(req,res)=>{
-    // const allBlogs = await Blog.find({}).populate("author")
-   
-    // res.render("blogs/index",{allBlogs})
 
      const { q, category } = req.query;  // read query params
-  let filter = {};
+     let filter = {};
 
   // Search filter
   if (q) {
