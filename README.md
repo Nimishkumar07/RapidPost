@@ -2,7 +2,7 @@
 
 AI - Powered Blogging Platform
 
-**Preview:** [https://rapidpost-r4ds.onrender.com/blogs](https://rapidpost-r4ds.onrender.com/blogs)
+**🌐 Live Website:** [RapidPost](https://rapidpost-r4ds.onrender.com/blogs)
 
 ## 📝 Overview
 
