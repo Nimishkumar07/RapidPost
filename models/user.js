@@ -16,41 +16,54 @@ const userSchema = new Schema({
         unique: true,
         trim: true,
         lowercase: true,
-        match: [/\S+@\S+\.\S+/, 'is invalid'] 
+        match: [/\S+@\S+\.\S+/, 'is invalid']
     },
     avatar: {
-        url:{
-            type:String,
-            default: 'https://images.unsplash.com/photo-1593085512500-5d55148d6f0d' 
-         },
-         filename:String,
-       
+        url: {
+            type: String,
+            default: 'https://images.unsplash.com/photo-1593085512500-5d55148d6f0d'
+        },
+        filename: String,
+
     },
     bio: {
         type: String,
         maxlength: 250,
         default: 'Always Excited to share Thoughts !'
     },
-    socialLinks: { 
-        twitter: {type:String, default:''}, 
-        linkedin: {type:String, default:''}, 
-        github: {type:String, default:''},
-        instagram: {type:String, default:''},
+    socialLinks: {
+        twitter: { type: String, default: '' },
+        linkedin: { type: String, default: '' },
+        github: { type: String, default: '' },
+        instagram: { type: String, default: '' },
     },
     // Stores the id of all blogs created by this user
     blogs: [{
         type: Schema.Types.ObjectId,
         ref: 'Blog'
     }],
-    blogCount: { 
-        type: Number, 
-        default: 0 
+    blogCount: {
+        type: Number,
+        default: 0
     },
-    savedBlogs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Blog" }], 
-    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],  
-    following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }] 
+    savedBlogs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Blog" }],
+    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    notificationPreferences: {
+        likes: { type: Boolean, default: true },
+        comments: { type: Boolean, default: true },
+        follows: { type: Boolean, default: true },
+        newPosts: { type: Boolean, default: true }
+    },
+    pushSubscriptions: [{
+        endpoint: String,
+        keys: {
+            p256dh: String,
+            auth: String
+        }
+    }]
 }, {
-    
+
     timestamps: true
 });
 

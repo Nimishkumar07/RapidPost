@@ -32,10 +32,12 @@
           </div>
           
         <% if (currUser && currUser._id.toString() === user._id.toString()) { %>
-          <a href="/users/<%= currUser._id %>/edit" class="btn btn-primary mt-3 mt-md-0 d-inline-flex align-items-center gap-2">
-            <i class="bi bi-gear"></i>
-            <span class="small">Edit Profile</span>
-          </a>
+          <div class="d-flex gap-2 mt-3 mt-md-0">
+            <a href="/users/<%= currUser._id %>/edit" class="btn btn-primary d-inline-flex align-items-center gap-2">
+              <i class="bi bi-gear"></i>
+              <span class="small">Edit Profile</span>
+            </a>
+          </div>
           <% } %>
         </div>
 

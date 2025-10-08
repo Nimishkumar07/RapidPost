@@ -170,3 +170,14 @@ body{
   padding: 4px 12px;
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
+
+.bttn{
+    border: solid 1px #d6b9ea;
+    background-color: #f3e8ff;
+    border-radius: 5px;
+    padding: 4px 8px;
+}
+
+.bttn:hover{
+    background-color: #d6b9ea;
+}

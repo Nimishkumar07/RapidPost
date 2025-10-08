@@ -1,6 +1,6 @@
 {
-  "engines":{
-    "node":"20.17.0"
+  "engines": {
+    "node": "20.17.0"
   },
   "name": "server",
   "version": "1.0.0",
@@ -8,7 +8,7 @@
   "type": "module",
   "scripts": {
     "server": "nodemon server.js",
-    "start":"node server.js"
+    "start": "node server.js"
   },
   "author": "Nimish",
   "license": "ISC",
@@ -33,6 +33,8 @@
     "multer-storage-cloudinary": "^4.0.0",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
-    "passport-local-mongoose": "^8.0.0"
+    "passport-local-mongoose": "^8.0.0",
+    "socket.io": "^4.8.1",
+    "web-push": "^3.6.7"
   }
 }

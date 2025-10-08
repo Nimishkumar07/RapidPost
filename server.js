@@ -4,6 +4,8 @@ if(process.env.NODE_ENV != "production"){
 
 import express from'express'
 const app = express()
+import { createServer } from 'http'
+import { Server } from 'socket.io'
 import mongoose from 'mongoose'
 import cors from 'cors'
 import 'dotenv/config'
@@ -16,6 +18,7 @@ import userRouter from "./routes/user.js"
 import likeRouter from './routes/like.js'
 import savedRouter from "./routes/saved.js";
 import followRouter from './routes/follow.js'
+import notificationRouter from './routes/notifications.js'
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
 import flash from 'connect-flash'
@@ -25,6 +28,15 @@ import User from './models/user.js'
 import ejsMate from 'ejs-mate'
 import moment from 'moment'
 import  {storage}  from './cloudConfig.js'
+
+// Create HTTP server and Socket.io instance
+const server = createServer(app)
+const io = new Server(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
+})
 
 const dbUrl = process.env.ATLASDB_URL
 
@@ -106,6 +118,7 @@ app.use((req,res,next)=>{
     res.locals.success = req.flash("success")
     res.locals.error = req.flash("error")
     res.locals.currUser =req.user
+    req.io = io // Make io available in all routes
     next()
 })
 
@@ -117,6 +130,7 @@ app.use("/",userRouter)
 app.use("/blogs",likeRouter)
 app.use("/", savedRouter);
 app.use("/users",followRouter)
+app.use("/notifications", notificationRouter)
 app.use("/blogs",blogRouter)
 
 
@@ -128,10 +142,46 @@ app.use((err,req,res,next)=>{
 
 
 
+// Socket.io connection handling
+io.on('connection', (socket) => {
+    console.log('User connected:', socket.id);
+    
+    // Handle user authentication and room joining
+    socket.on('authenticate', (userId) => {
+        try {
+            if (userId && typeof userId === 'string') {
+                socket.join(`user_${userId}`);
+                socket.userId = userId; // Store userId on socket for later use
+                console.log(`User ${userId} joined their notification room`);
+            } else {
+                console.warn('Invalid userId provided for authentication:', userId);
+            }
+        } catch (error) {
+            console.error('Error during socket authentication:', error);
+        }
+    });
+    
+    socket.on('disconnect', (reason) => {
+        console.log('User disconnected:', socket.id, 'Reason:', reason);
+        if (socket.userId) {
+            console.log(`User ${socket.userId} left their notification room`);
+        }
+    });
+    
+    socket.on('error', (error) => {
+        console.error('Socket error:', error);
+    });
+    
+    // Handle connection errors
+    socket.on('connect_error', (error) => {
+        console.error('Socket connection error:', error);
+    });
+});
+
 const PORT = process.env.PORT || 8080
 
-app.listen(PORT, ()=>{
+server.listen(PORT, ()=>{
     console.log("server is running on "+ PORT)
 })
 
-export default app;
+export { app, io };

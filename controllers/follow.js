@@ -1,4 +1,5 @@
 import User from "../models/user.js";
+import notificationService from "../services/notificationService.js";
 
 // Toggle follow/unfollow
 export const toggleFollow = async (req, res) => {
@@ -31,6 +32,28 @@ export const toggleFollow = async (req, res) => {
   } else {
     currentUser.following.push(targetUserId);
     targetUser.followers.push(currentUserId);
+    
+    // Create follow notification
+    try {
+      const notification = await notificationService.createNotification({
+        recipient: targetUserId,
+        sender: currentUserId,
+        type: 'follow',
+        message: `${req.user.name} started following you`
+      });
+      
+      // Send real-time notification if created
+      if (notification && req.io) {
+        await notificationService.sendRealTimeNotification(
+          targetUserId, 
+          notification, 
+          req.io
+        );
+      }
+    } catch (error) {
+      console.error('Error creating follow notification:', error);
+      
+    }
   }
 
   await currentUser.save();

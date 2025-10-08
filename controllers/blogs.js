@@ -1,6 +1,7 @@
 import Blog from "../models/blog.js"
 import User from "../models/user.js"
-import main from "../gemini.js"
+import main from "../services/geminiService.js"
+import notificationService from "../services/notificationService.js"
 
 //index route
 export const index = async(req,res)=>{
@@ -70,6 +71,39 @@ export const createBlog = async (req,res,next)=>{
     user.blogs.push(newBlog._id);
     user.blogCount = user.blogs.length; // or user.blogCount += 1;
     await user.save();
+
+    // Create notifications for all followers
+    try {
+        const followers = user.followers;
+        if (followers && followers.length > 0) {
+            // Create notifications for all followers in batch
+            const notificationPromises = followers.map(async (followerId) => {
+                const notification = await notificationService.createNotification({
+                    recipient: followerId,
+                    sender: req.user._id,
+                    type: 'new_post',
+                    message: `${req.user.name} published a new blog post "${newBlog.title}"`,
+                    relatedBlog: newBlog._id
+                });
+                
+                // Send real-time notification if created
+                if (notification && req.io) {
+                    await notificationService.sendRealTimeNotification(
+                        followerId, 
+                        notification, 
+                        req.io
+                    );
+                }
+                
+                return notification;
+            });
+            
+            await Promise.all(notificationPromises);
+        }
+    } catch (error) {
+        console.error('Error creating new post notifications:', error);
+        
+    }
 
     req.flash("success", "New Blog Created! ")
     res.redirect("/blogs")
