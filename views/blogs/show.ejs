@@ -146,7 +146,9 @@
           <div class="card shadow-sm">
             <div class="card-body position-relative">
               <div class="d-flex align-items-center gap-3 mb-3">
-                <img src="<%= review.author.avatar ? review.author.avatar.url : '/default-avatar.png' %>" alt="<%= review.author.name %>" class="rounded-circle" style="width:40px;height:40px;object-fit:cover;">
+                <a href="/users/<%= review.author._id %>" class="text-decoration-none">
+                  <img src="<%= review.author.avatar ? review.author.avatar.url : '/default-avatar.png' %>" alt="<%= review.author.name %>" class="rounded-circle" style="width:40px;height:40px;object-fit:cover;">
+                </a>
                 <div>
                   <h4 class="h6 fw-semibold mb-0"><%= review.author.name %></h4>
                   <p class="small text-muted mb-0"><%= new Date(review.createdAt).toLocaleDateString() %></p>
