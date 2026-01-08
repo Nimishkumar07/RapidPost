@@ -35,21 +35,27 @@ export const index = async (req, res) => {
 
 //show route
 export const showBlog = async (req, res, next) => {
-    let { id } = req.params
-    const blog = await Blog.findById(id)
+    let { id } = req.params;
+    console.log(`[DEBUG] showBlog Hit! ID: ${id}`);
+
+    // Increment views by 1 automatically when fetching
+    const blog = await Blog.findByIdAndUpdate(
+        id,
+        { $inc: { views: 1 } },
+        { new: true }
+    )
         .populate({ path: "reviews", populate: { path: "author" } })
         .populate("author");
+
     if (!blog) {
+        console.log(`[DEBUG] Blog not found`);
         return res.status(404).json({ message: "Blog does not exist" });
     }
+    console.log(`[DEBUG] Blog found. New views: ${blog.views}`);
     res.json(blog);
 }
 
-export const incrementView = async (req, res) => {
-    let { id } = req.params;
-    await Blog.findByIdAndUpdate(id, { $inc: { views: 1 } });
-    res.status(200).send("View incremented");
-}
+
 
 
 import { getIO } from '../socket.js';

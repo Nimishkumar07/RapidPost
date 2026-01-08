@@ -5,8 +5,9 @@ let io;
 export const initSocket = (server) => {
     io = new Server(server, {
         cors: {
-            origin: "*",
-            methods: ["GET", "POST"]
+            origin: ["https://rapidpost-client.vercel.app", "http://localhost:5173"],
+            methods: ["GET", "POST"],
+            credentials: true
         }
     });
     return io;

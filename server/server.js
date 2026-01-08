@@ -117,6 +117,12 @@ app.use((req, res, next) => {
     next()
 })
 
+// DEBUG: Global Request Logger
+app.use((req, res, next) => {
+    console.log(`[SERVER] ${req.method} ${req.path}`);
+    next();
+});
+
 
 
 

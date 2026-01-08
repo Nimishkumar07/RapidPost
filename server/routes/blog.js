@@ -4,7 +4,7 @@ import ExpressError from '../utils/ExpressError.js'
 import Blog from '../models/blog.js'
 import { isLoggedIn, isOwner } from '../middleware.js'
 import { validateBlog } from '../middleware.js'
-import { index, createBlog, showBlog, updateBlog, destroyBlog, generateBlog, incrementView } from '../controllers/blogs.js'
+import { index, createBlog, showBlog, updateBlog, destroyBlog, generateBlog } from '../controllers/blogs.js'
 import multer from 'multer'
 import { storage } from '../cloudConfig.js'
 const upload = multer({ storage })
@@ -21,7 +21,7 @@ router.get("/", wrapAsync(index))
 router.get("/:id", wrapAsync(showBlog))
 
 //increment view
-router.post("/:id/view", wrapAsync(incrementView))
+//increment view route removed (handled in show)
 
 //create route
 router.post("/", isLoggedIn, upload.single("blog[image]"), validateBlog, wrapAsync(createBlog))

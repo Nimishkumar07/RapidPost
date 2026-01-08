@@ -12,16 +12,12 @@ export const useBlogDetails = (id) => {
         const fetchBlog = async () => {
             setLoading(true);
             try {
+                // Backend now auto-increments views on fetch (legacy behavior)
+                // We just display what we get.
                 const response = await blogService.getById(id);
-                setBlog(response.data.blog || response.data);
+                const blogData = response.data.blog || response.data;
 
-                // Increment view logic
-                const viewKey = `viewed_${id}`;
-                if (!sessionStorage.getItem(viewKey)) {
-                    blogService.incrementView(id).catch(err => console.error("View inc error", err));
-                    sessionStorage.setItem(viewKey, 'true');
-                }
-
+                setBlog(blogData);
                 setLoading(false);
             } catch (err) {
                 console.error("Error fetching blog:", err);

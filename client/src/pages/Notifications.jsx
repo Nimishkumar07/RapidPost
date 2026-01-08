@@ -181,7 +181,7 @@ const Notifications = () => {
                                                     <div className="mt-2">
                                                         <Link
                                                             to={`/blogs/${notification.relatedBlog._id}`}
-                                                            className="btn btn-sm btn-outline-primary notification-link"
+                                                            className=" btn-sm btn-outline-primary notification-link"
                                                             onClick={() => !notification.isRead && handleMarkRead(notification._id)}
                                                         >
                                                             <i className="bi bi-arrow-right me-1"></i> View Post
