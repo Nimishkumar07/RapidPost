@@ -14,16 +14,27 @@ const BlogDetails = () => {
     const { blog, setBlog, loading, error } = useBlogDetails(id);
     const [isReading, setIsReading] = useState(false);
 
+    
     useEffect(() => {
+        // Stop any residual speech from previous pages immediately
+        window.speechSynthesis.cancel();
+
+        const handleUnload = () => {
+            window.speechSynthesis.cancel();
+        };
+
+        // Listen for page refresh/close
+        window.addEventListener('beforeunload', handleUnload);
+
         return () => {
-            if (window.speechSynthesis.speaking) {
-                window.speechSynthesis.cancel();
-            }
+            // Cleanup on component unmount (React navigation)
+            window.removeEventListener('beforeunload', handleUnload);
+            window.speechSynthesis.cancel();
         };
     }, []);
 
 
-    // Ensure voices are loaded (Mobile fix)
+    // Ensure voices are loaded (for mobile)
     useEffect(() => {
         const loadVoices = () => {
             window.speechSynthesis.getVoices();
@@ -58,7 +69,7 @@ const BlogDetails = () => {
         const speakNextChunk = () => {
             // If component unmounted or stopped, stop recursion
             if (!window.speechSynthesis.speaking && currentChunk > 0) {
-                // Check if it was manually cancelled (browsers are tricky here, logic below is safer)
+                // Check if it was manually cancelled 
             }
 
             if (currentChunk >= chunks.length) {

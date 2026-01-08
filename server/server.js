@@ -84,10 +84,14 @@ const sessionOption = {
     secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
+    proxy: true, // Required for Heroku/Render
     cookie: {
         expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
         maxAge: 7 * 24 * 60 * 60 * 1000,
         httpOnly: true,
+        // Secure and SameSite are critically important for cross-site (Vercel -> Render) cookies
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     },
 }
 
@@ -95,7 +99,7 @@ app.get('/', (req, res) => {
     res.send("Hi, I am root")
 })
 
-
+app.set('trust proxy', 1); // Trust the proxy (Render load balancer)
 app.use(session(sessionOption))
 
 

@@ -25,11 +25,12 @@ export const AuthProvider = ({ children }) => {
             }
         };
         checkAuth();
-    }, [socket]); 
+    }, [socket]);
 
     // Initialize socket/connection on mount (Public access)
     useEffect(() => {
-        const newSocket = io('https://rapidpost-r4ds.onrender.com', {
+        const socketUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+        const newSocket = io(socketUrl, {
             transports: ['websocket'],
             reconnection: true,
             reconnectionAttempts: 5,
