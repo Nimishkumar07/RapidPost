@@ -22,6 +22,16 @@ const BlogDetails = () => {
         };
     }, []);
 
+
+    // Ensure voices are loaded (Mobile fix)
+    useEffect(() => {
+        const loadVoices = () => {
+            window.speechSynthesis.getVoices();
+        };
+        loadVoices();
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+    }, []);
+
     const handleReadAloud = () => {
         if (!blog || !blog.description) return;
 
@@ -34,10 +44,26 @@ const BlogDetails = () => {
         const text = new DOMParser().parseFromString(blog.description, 'text/html').body.textContent;
         if (!text.trim()) return;
 
+        // Mobile browsers sometimes need a kickstart
+        window.speechSynthesis.cancel();
+
         setIsReading(true);
         const utterance = new SpeechSynthesisUtterance(text);
+
+        // Improve voice selection for mobile
+        const voices = window.speechSynthesis.getVoices();
+        if (voices.length > 0) {
+            // Prefer English
+            const preferredVoice = voices.find(v => v.lang.includes('en')) || voices[0];
+            utterance.voice = preferredVoice;
+        }
+
         utterance.onend = () => setIsReading(false);
-        utterance.onerror = () => setIsReading(false);
+        utterance.onerror = (e) => {
+            console.error("Speech error", e);
+            setIsReading(false);
+        };
+
         window.speechSynthesis.speak(utterance);
     };
 
