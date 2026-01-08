@@ -1,5 +1,7 @@
 import webpush from 'web-push';
 import User from '../models/user.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 class PushNotificationService {
     constructor() {
