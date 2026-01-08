@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
 
     // Initialize socket/connection on mount (Public access)
     useEffect(() => {
-        const newSocket = io('http://localhost:8080', {
+        const newSocket = io('https://rapidpost-r4ds.onrender.com', {
             transports: ['websocket'],
             reconnection: true,
             reconnectionAttempts: 5,

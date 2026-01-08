@@ -5,8 +5,8 @@ class PushNotificationService {
     constructor() {
         // Set VAPID keys (generated for your app)
         const vapidKeys = {
-            publicKey: process.env.VAPID_PUBLIC_KEY || 'BPKkY4d1Wk1gy_9JJNA770cepLbSkD67As80FiXBIK0haVyhcjKJoDacetccump63pT6az7iBK46oIr_x_vswBk',
-            privateKey: process.env.VAPID_PRIVATE_KEY || 'ffJqe0NO2wY3MzeMDvpuv6w1IO5dgOjx81OB6cSUJYw'
+            publicKey: process.env.VAPID_PUBLIC_KEY,
+            privateKey: process.env.VAPID_PRIVATE_KEY 
         };
 
         webpush.setVapidDetails(

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:8080', // Backend URL
+    baseURL: 'https://rapidpost-r4ds.onrender.com', // Backend URL
     withCredentials: true, // Send cookies with requests
     headers: {
         'Content-Type': 'application/json',
