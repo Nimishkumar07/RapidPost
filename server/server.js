@@ -56,7 +56,8 @@ const __dirname = dirname(__filename);
 
 //middlewares
 app.use(cors({
-    origin: "https://rapidpost-client.vercel.app/",    // production frontend
+    origin: ["https://rapidpost-client.vercel.app",   // production frontend
+        "http://localhost:5173"],    // development frontend
     credentials: true
 }))
 app.use(express.json())
