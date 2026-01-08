@@ -44,27 +44,55 @@ const BlogDetails = () => {
         const text = new DOMParser().parseFromString(blog.description, 'text/html').body.textContent;
         if (!text.trim()) return;
 
-        // Mobile browsers sometimes need a kickstart
         window.speechSynthesis.cancel();
-
         setIsReading(true);
-        const utterance = new SpeechSynthesisUtterance(text);
 
-        // Improve voice selection for mobile
-        const voices = window.speechSynthesis.getVoices();
-        if (voices.length > 0) {
-            // Prefer English
-            const preferredVoice = voices.find(v => v.lang.includes('en')) || voices[0];
-            utterance.voice = preferredVoice;
+        const chunkSize = 200;
+        const chunks = [];
+        for (let i = 0; i < text.length; i += chunkSize) {
+            chunks.push(text.slice(i, i + chunkSize));
         }
 
-        utterance.onend = () => setIsReading(false);
-        utterance.onerror = (e) => {
-            console.error("Speech error", e);
-            setIsReading(false);
+        let currentChunk = 0;
+
+        const speakNextChunk = () => {
+            // If component unmounted or stopped, stop recursion
+            if (!window.speechSynthesis.speaking && currentChunk > 0) {
+                // Check if it was manually cancelled (browsers are tricky here, logic below is safer)
+            }
+
+            if (currentChunk >= chunks.length) {
+                setIsReading(false);
+                return;
+            }
+
+            const utterance = new SpeechSynthesisUtterance(chunks[currentChunk]);
+
+            // Mobile voice fix
+            const voices = window.speechSynthesis.getVoices();
+            if (voices.length > 0) {
+                const preferredVoice = voices.find(v => v.lang.includes('en')) || voices[0];
+                utterance.voice = preferredVoice;
+            }
+
+            utterance.lang = "en-IN";
+            utterance.rate = 1;
+
+            utterance.onend = () => {
+                currentChunk++;
+                // Small delay to prevent "stutter" on some devices
+                setTimeout(speakNextChunk, 10);
+            };
+
+            utterance.onerror = (e) => {
+                console.error("Speech chunk error", e);
+                setIsReading(false);
+            };
+
+            window.speechSynthesis.speak(utterance);
         };
 
-        window.speechSynthesis.speak(utterance);
+        speakNextChunk();
     };
 
     const handleShare = () => {
