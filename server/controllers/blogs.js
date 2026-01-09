@@ -36,7 +36,6 @@ export const index = async (req, res) => {
 //show route
 export const showBlog = async (req, res, next) => {
     let { id } = req.params;
-    console.log(`[DEBUG] showBlog Hit! ID: ${id}`);
 
     // Increment views by 1 automatically when fetching
     const blog = await Blog.findByIdAndUpdate(
@@ -48,10 +47,9 @@ export const showBlog = async (req, res, next) => {
         .populate("author");
 
     if (!blog) {
-        console.log(`[DEBUG] Blog not found`);
         return res.status(404).json({ message: "Blog does not exist" });
     }
-    console.log(`[DEBUG] Blog found. New views: ${blog.views}`);
+    
     res.json(blog);
 }
 

@@ -2,7 +2,9 @@
 
 **AI-Powered Blogging Platform with Real-Time Notifications**
 
-**🌐 Live Website:** [RapidPost](https://rapidpost-r4ds.onrender.com/blogs)
+**🌐 Live Website:** [RapidPost](https://rapidpost-client.vercel.app/)
+
+⚠️ Note: It may take some time to load ⏳ since it’s deployed on the free Render tier.
 
 ## 📝 Overview
 
