@@ -104,6 +104,22 @@ npm run dev
 # Runs on localhost:5173
 ```
 
+## 🌐 Deployment
+
+- Frontend Deployed on [Vercel](https://vercel.com/)
+- Backend Deployed on [Render](https://render.com/)
+- Database hosted with MongoDB Atlas
+
+## 📖 Usage
+
+- **Browse Blogs:** See all published blogs on the home page.
+- **Write a Blog:** Sign up/log in and click "Write" to create a new blog. Choose manual writing or use AI.
+- **AI Generation:** Enter a topic, select tone, length, and format, then click "Generate Content".
+- **Edit & Manage:** Edit or delete your blogs from the dashboard.
+- **Profile:** Manage your user profile and settings.
+- **Intractive Social features:** likes,reviews,follow
+- **Read Aloud:** Click the “Read Aloud” button on any blog post to have it spoken aloud.
+
 ## 🌐 API Reference
 
 | Method | Endpoint | Description |
@@ -116,7 +132,10 @@ npm run dev
 | `POST` | `/login` | Authenticate user |
 | `GET` | `/notifications` | Get user notifications |
 
-## � Support
+## 💬 Support
 
 Created by [Nimish Kumar](https://www.linkedin.com/in/nimishkumar07/).
-Powered by **RapidPost** technology.
+
+---
+
+© RapidPost. All rights reserved. Powered by AI technology and real-time notifications.
