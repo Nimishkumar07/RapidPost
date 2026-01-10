@@ -31,7 +31,7 @@ RapidPost is a modern, full-stack blogging platform powered by AI. It features a
 ## 💻 Tech Stack
 
 ### **Frontend (`/client`)**
-- **React 18** - Functional components & Hooks
+- **React** - Functional components & Hooks
 - **Vite** - Next-generation build tool
 - **React Router 6** - Client-side routing
 - **Bootstrap 5** - Responsive UI components
@@ -134,7 +134,7 @@ npm run dev
 
 ## 💬 Support
 
-Created by [Nimish Kumar](https://www.linkedin.com/in/nimishkumar07/).
+Developed by [Nimish Kumar](https://www.linkedin.com/in/nimishkumar07/) with ❤️.
 
 ---
 
