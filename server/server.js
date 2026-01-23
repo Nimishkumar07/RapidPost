@@ -57,8 +57,7 @@ const __dirname = dirname(__filename);
 //middlewares
 app.use(cors({
     origin: ["https://rapidpost.live",
-                "https://www.rapidpost.live",
-                "http://localhost:5173"],    // development frontend
+                "https://www.rapidpost.live"],   
     credentials: true
 }))
 app.use(express.json())
@@ -85,7 +84,7 @@ const sessionOption = {
     secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
-    proxy: true, // Required for Heroku/Render
+    proxy: true, // Required when behind Nginx / Cloudflare proxy
     cookie: {
         expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
         maxAge: 7 * 24 * 60 * 60 * 1000,
