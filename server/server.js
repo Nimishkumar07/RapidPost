@@ -56,7 +56,7 @@ const __dirname = dirname(__filename);
 app.use((req, res, next) => {
     res.setHeader('X-SERVER-ID', 'EC2-RAPIDPOST-PROD');
     next();
-});
+}); //
 
 //middlewares
 app.use(cors({
@@ -127,6 +127,12 @@ app.use((req, res, next) => {
     next();
 });
 
+app.get('/__whoami', (req, res) => {
+    res.json({
+        server: 'EC2_PRODUCTION',
+        time: Date.now()
+    });
+}); //
 
 
 
