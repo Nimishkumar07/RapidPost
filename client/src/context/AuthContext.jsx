@@ -29,9 +29,10 @@ export const AuthProvider = ({ children }) => {
 
     // Initialize socket/connection on mount (Public access)
     useEffect(() => {
-        const socketUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+        const socketUrl = import.meta.env.VITE_API_URL;
         const newSocket = io(socketUrl, {
             transports: ['websocket'],
+            withCredentials: true,
             reconnection: true,
             reconnectionAttempts: 5,
             reconnectionDelay: 1000
