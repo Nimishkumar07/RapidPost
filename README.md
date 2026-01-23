@@ -2,9 +2,9 @@
 
 **AI-Powered Blogging Platform with Real-Time Notifications**
 
-**🌐 Live Website:** [RapidPost](https://rapidpost-client.vercel.app/)
+**🌐 Live Website:** [RapidPost](https://www.rapidpost.live/)
 
-⚠️ Note: It may take some time to load ⏳ since it’s deployed on the free Render tier.
+
 
 ## 📝 Overview
 
@@ -107,7 +107,7 @@ npm run dev
 ## 🌐 Deployment
 
 - Frontend Deployed on [Vercel](https://vercel.com/)
-- Backend Deployed on [Render](https://render.com/)
+- Backend Deployed on AWS EC2
 - Database hosted with MongoDB Atlas
 
 ## 📖 Usage
