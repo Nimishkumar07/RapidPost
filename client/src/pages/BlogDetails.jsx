@@ -122,24 +122,30 @@ const BlogDetails = () => {
 
     const handleLike = async () => {
         if (!user) return alert("Please login to like");
+        // Optimistic Update
+        const previousBlog = { ...blog };
+        setBlog(prev => {
+            const userId = user._id;
+            const likes = prev.likes || [];
+            // Use robust ID comparison
+            const isLiked = likes.some(like => isSameId(typeof like === 'string' ? like : like._id, userId));
+            let newLikes;
+
+            if (isLiked) {
+                newLikes = likes.filter(like => !isSameId(typeof like === 'string' ? like : like._id, userId));
+            } else {
+                newLikes = [...likes, userId];
+            }
+            return { ...prev, likes: newLikes };
+        });
+
         try {
             await blogService.toggleLike(id);
-            setBlog(prev => {
-                const userId = user._id;
-                const likes = prev.likes || [];
-                // Use robust ID comparison
-                const isLiked = likes.some(like => isSameId(typeof like === 'string' ? like : like._id, userId));
-                let newLikes;
-
-                if (isLiked) {
-                    newLikes = likes.filter(like => !isSameId(typeof like === 'string' ? like : like._id, userId));
-                } else {
-                    newLikes = [...likes, userId];
-                }
-                return { ...prev, likes: newLikes };
-            });
         } catch (err) {
             console.error("Like error", err);
+            // Revert on error
+            setBlog(previousBlog);
+            alert("Failed to like post");
         }
     };
 
