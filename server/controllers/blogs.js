@@ -54,7 +54,9 @@ export const showBlog = async (req, res, next) => {
     try {
         const io = getIO();
         if (io) {
-            io.to(`blog_${id}`).emit('update_views', {
+            const roomName = `blog_${id}`;
+            console.log(`[Socket] Emitting update_views to ${roomName} (blogId: ${id}, type: ${typeof id})`);
+            io.to(roomName).emit('update_views', {
                 blogId: id,
                 views: blog.views
             });

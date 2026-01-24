@@ -57,7 +57,7 @@ const __dirname = dirname(__filename);
 //middlewares
 app.use(cors({
     origin: ["https://rapidpost.live",
-                "https://www.rapidpost.live"],   
+        "https://www.rapidpost.live"],
     credentials: true
 }))
 app.use(express.json())
@@ -166,15 +166,19 @@ io.on('connection', (socket) => {
     // Handle joining blog post rooms for real-time comments
     socket.on('join_blog', (blogId) => {
         if (blogId) {
-            socket.join(`blog_${blogId}`);
-            console.log(`Socket ${socket.id} joined room blog_${blogId}`);
+            const roomName = `blog_${blogId}`;
+            socket.join(roomName);
+            console.log(`[Socket] ${socket.id} joined room ${roomName} (blogId type: ${typeof blogId})`);
+        } else {
+            console.warn(`[Socket] ${socket.id} attempted to join blog with null/undefined ID`);
         }
     });
 
     socket.on('leave_blog', (blogId) => {
         if (blogId) {
-            socket.leave(`blog_${blogId}`);
-            console.log(`Socket ${socket.id} left room blog_${blogId}`);
+            const roomName = `blog_${blogId}`;
+            socket.leave(roomName);
+            console.log(`[Socket] ${socket.id} left room ${roomName}`);
         }
     });
 
