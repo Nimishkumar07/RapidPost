@@ -65,7 +65,16 @@ export const showBlog = async (req, res, next) => {
         console.error("Socket emit update_views failed", e);
     }
 
-    res.json(blog);
+    // Verify socket status for debugging
+    const io = getIO();
+    const debugInfo = {
+        socketActive: !!io,
+        roomEmittedTo: `blog_${id}`,
+        blogIdType: typeof id
+    };
+
+    // Return blog wrapped in object to support debug info without breaking frontend (which checks response.data.blog)
+    res.json({ blog, debug: debugInfo });
 }
 
 

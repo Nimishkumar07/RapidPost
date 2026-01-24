@@ -96,8 +96,8 @@ export const toggleLike = async (req, res) => {
         likesCount: blog.likes.length,
         debug_req_io: !!req.io,
         debug_socket_io_global: socketStatus,
-        debug_room_target: `user_${blog.author._id.toString()}`
+        debug_room_notification_target: `user_${blog.author._id}`,
+        debug_room_blog_target: `blog_${blog._id}`
     });
-
 };
 
