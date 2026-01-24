@@ -10,13 +10,20 @@ class PushNotificationService {
             privateKey: process.env.VAPID_PRIVATE_KEY 
         };
 
+        if (
+        process.env.VAPID_PUBLIC_KEY &&
+        process.env.VAPID_PRIVATE_KEY
+        ) {
         webpush.setVapidDetails(
-            'mailto:rapidpost@example.com', // Replace with your actual email
+            'mailto:nimishkumar.india111@gmail.com', 
             vapidKeys.publicKey,
             vapidKeys.privateKey
         );
+        } else {
+        console.warn('[Push] VAPID keys missing, push disabled');
+        }
 
-        this.publicKey = vapidKeys.publicKey;
+            this.publicKey = vapidKeys.publicKey;
     }
 
     // Get VAPID public key for client-side subscription
