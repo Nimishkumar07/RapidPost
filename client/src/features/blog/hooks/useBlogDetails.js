@@ -31,6 +31,7 @@ export const useBlogDetails = (id) => {
 
     useEffect(() => {
         if (socket && id) {
+            console.log(`[Socket] Connecting to blog_${id}`);
             socket.emit('join_blog', id);
 
             const handleNewComment = (newComment) => {
@@ -52,12 +53,14 @@ export const useBlogDetails = (id) => {
             };
 
             const handleUpdateViews = (data) => {
+                console.log("[Socket] Received update_views", data);
                 if (data.blogId === id) {
                     setBlog(prev => prev ? { ...prev, views: data.views } : prev);
                 }
             };
 
             const handleUpdateLikes = (data) => {
+                console.log("[Socket] Received update_likes", data);
                 if (data.blogId === id) {
                     setBlog(prev => prev ? { ...prev, likes: data.likes } : prev);
                 }
