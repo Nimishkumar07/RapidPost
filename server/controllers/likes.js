@@ -74,7 +74,20 @@ export const toggleLike = async (req, res) => {
 
     await blog.save();
 
-    
+    // Emit real-time like update (Broadcast to blog room)
+    try {
+        const io = getIO();
+        if (io) {
+            io.to(`blog_${blog._id}`).emit('update_likes', {
+                blogId: blog._id,
+                likes: blog.likes
+            });
+        }
+    } catch (e) {
+        console.error("Socket emit update_likes failed", e);
+    }
+
+
     res.json({
         message: alreadyLiked ? "Unliked" : "Liked",
         liked: !alreadyLiked,

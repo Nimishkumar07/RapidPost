@@ -51,13 +51,29 @@ export const useBlogDetails = (id) => {
                 });
             };
 
+            const handleUpdateViews = (data) => {
+                if (data.blogId === id) {
+                    setBlog(prev => prev ? { ...prev, views: data.views } : prev);
+                }
+            };
+
+            const handleUpdateLikes = (data) => {
+                if (data.blogId === id) {
+                    setBlog(prev => prev ? { ...prev, likes: data.likes } : prev);
+                }
+            };
+
             socket.on('newComment', handleNewComment);
             socket.on('deleteComment', handleDeleteComment);
+            socket.on('update_views', handleUpdateViews);
+            socket.on('update_likes', handleUpdateLikes);
 
             return () => {
                 socket.emit('leave_blog', id);
                 socket.off('newComment', handleNewComment);
                 socket.off('deleteComment', handleDeleteComment);
+                socket.off('update_views', handleUpdateViews);
+                socket.off('update_likes', handleUpdateLikes);
             };
         }
     }, [socket, id]);

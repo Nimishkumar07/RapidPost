@@ -49,7 +49,20 @@ export const showBlog = async (req, res, next) => {
     if (!blog) {
         return res.status(404).json({ message: "Blog does not exist" });
     }
-    
+
+    // Emit real-time view update
+    try {
+        const io = getIO();
+        if (io) {
+            io.to(`blog_${id}`).emit('update_views', {
+                blogId: id,
+                views: blog.views
+            });
+        }
+    } catch (e) {
+        console.error("Socket emit update_views failed", e);
+    }
+
     res.json(blog);
 }
 
