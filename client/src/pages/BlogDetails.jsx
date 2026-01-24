@@ -14,11 +14,13 @@ const BlogDetails = () => {
     const { blog, setBlog, loading, error } = useBlogDetails(id);
     const [isReading, setIsReading] = useState(false);
 
-    useEffect(() => {
-        if (id) {
-            blogService.incrementView(id);
-        }
-    }, [id]);
+    // Helper for safe ID comparison
+    const isSameId = (id1, id2) => {
+        if (!id1 || !id2) return false;
+        const s1 = typeof id1 === 'object' ? id1.toString() : id1;
+        const s2 = typeof id2 === 'object' ? id2.toString() : id2;
+        return s1 === s2;
+    };
 
 
     useEffect(() => {
@@ -125,11 +127,12 @@ const BlogDetails = () => {
             setBlog(prev => {
                 const userId = user._id;
                 const likes = prev.likes || [];
-                const isLiked = likes.some(like => (typeof like === 'string' ? like : like._id) === userId);
+                // Use robust ID comparison
+                const isLiked = likes.some(like => isSameId(typeof like === 'string' ? like : like._id, userId));
                 let newLikes;
 
                 if (isLiked) {
-                    newLikes = likes.filter(like => (typeof like === 'string' ? like : like._id) !== userId);
+                    newLikes = likes.filter(like => !isSameId(typeof like === 'string' ? like : like._id, userId));
                 } else {
                     newLikes = [...likes, userId];
                 }
@@ -177,7 +180,7 @@ const BlogDetails = () => {
                 <BlogContent
                     blog={blog}
                     user={user}
-                    isLiked={blog?.likes?.some(like => (typeof like === 'string' ? like : like._id) === user?._id)}
+                    isLiked={blog?.likes?.some(like => isSameId(typeof like === 'string' ? like : like._id, user?._id))}
                     handleLike={handleLike}
                     handleShare={handleShare}
                     handleSave={handleSave}

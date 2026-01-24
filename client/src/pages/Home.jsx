@@ -39,7 +39,7 @@ const Home = () => {
                     if (exists) return prev;
 
                     setHighlightedBlogId(newBlog._id); // Highlight the new blog
-                    
+
                     setTimeout(() => setHighlightedBlogId(null), 5000); // Clear highlight after 5 seconds
 
                     return [newBlog, ...prev];
@@ -50,12 +50,24 @@ const Home = () => {
                 setBlogs(prev => prev.filter(b => b._id !== blogId));
             };
 
+            const handleUpdateViews = (data) => {
+                setBlogs(prev => prev.map(b => b._id === data.blogId ? { ...b, views: data.views } : b));
+            };
+
+            const handleUpdateLikes = (data) => {
+                setBlogs(prev => prev.map(b => b._id === data.blogId ? { ...b, likes: data.likes } : b));
+            };
+
             socket.on('newBlog', handleNewBlog);
             socket.on('deleteBlog', handleDeleteBlog);
+            socket.on('update_views', handleUpdateViews);
+            socket.on('update_likes', handleUpdateLikes);
 
             return () => {
                 socket.off('newBlog', handleNewBlog);
                 socket.off('deleteBlog', handleDeleteBlog);
+                socket.off('update_views', handleUpdateViews);
+                socket.off('update_likes', handleUpdateLikes);
             };
         }
     }, [socket, category, q]);
@@ -87,7 +99,7 @@ const Home = () => {
                 if (category && category !== 'All') paramsObj.category = category;
 
                 const response = await blogService.getAll(paramsObj);
-                
+
                 setBlogs(response.data.allBlogs || response.data);
             } catch (err) {
                 console.error("Error fetching blogs:", err);

@@ -78,9 +78,8 @@ export const toggleLike = async (req, res) => {
     try {
         const io = getIO();
         if (io) {
-            const roomName = `blog_${blog._id}`;
-            console.log(`[Socket] Emitting update_likes to ${roomName} (blogId: ${blog._id})`);
-            io.to(roomName).emit('update_likes', {
+            console.log(`[Socket] Broadcasting update_likes globally (blogId: ${blog._id})`);
+            io.emit('update_likes', {
                 blogId: blog._id,
                 likes: blog.likes
             });
