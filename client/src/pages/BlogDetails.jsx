@@ -14,7 +14,13 @@ const BlogDetails = () => {
     const { blog, setBlog, loading, error } = useBlogDetails(id);
     const [isReading, setIsReading] = useState(false);
 
-    
+    useEffect(() => {
+        if (id) {
+            blogService.incrementView(id);
+        }
+    }, [id]);
+
+
     useEffect(() => {
         // Stop any residual speech from previous pages immediately
         window.speechSynthesis.cancel();
@@ -119,10 +125,11 @@ const BlogDetails = () => {
             setBlog(prev => {
                 const userId = user._id;
                 const likes = prev.likes || [];
-                const isLiked = likes.includes(userId);
+                const isLiked = likes.some(like => (typeof like === 'string' ? like : like._id) === userId);
                 let newLikes;
+
                 if (isLiked) {
-                    newLikes = likes.filter(uid => uid !== userId);
+                    newLikes = likes.filter(like => (typeof like === 'string' ? like : like._id) !== userId);
                 } else {
                     newLikes = [...likes, userId];
                 }
@@ -170,6 +177,7 @@ const BlogDetails = () => {
                 <BlogContent
                     blog={blog}
                     user={user}
+                    isLiked={blog?.likes?.some(like => (typeof like === 'string' ? like : like._id) === user?._id)}
                     handleLike={handleLike}
                     handleShare={handleShare}
                     handleSave={handleSave}

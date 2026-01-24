@@ -1,5 +1,5 @@
 
-const BlogContent = ({ blog, user, handleLike, handleShare, handleSave }) => {
+const BlogContent = ({ blog, user, isLiked, handleLike, handleShare, handleSave }) => {
     return (
         <>
             {/* Featured Image */}
@@ -24,7 +24,7 @@ const BlogContent = ({ blog, user, handleLike, handleShare, handleSave }) => {
                 <div className="d-flex align-items-center gap-3">
                     {/* Likes */}
                     <button onClick={handleLike} className="btnn-decore btn-link text-decoration-none text-muted p-0 d-inline-flex align-items-center">
-                        {user && blog.likes?.includes(user._id) ? (
+                        {isLiked ? (
                             <i className="fa-solid fa-heart me-2" style={{ color: 'red' }}></i>
                         ) : (
                             <i className="fa-regular fa-heart me-2"></i>
