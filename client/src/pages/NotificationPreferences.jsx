@@ -53,16 +53,7 @@ const NotificationPreferences = () => {
         }
     };
 
-    const sendTestPush = async () => {
-        try {
-            await api.post('/notifications/api/push/test');
-            showToast("Test notification sent successfully", "info");
-        } catch (err) {
-            console.error("Test push error:", err);
-            const errorMsg = err.response?.data?.message || "Failed to send test notification";
-            showToast(errorMsg, "error");
-        }
-    };
+
 
     if (loading) return (
         <div className="d-flex justify-content-center mt-5">
@@ -166,12 +157,6 @@ const NotificationPreferences = () => {
                                     >
                                         <i className={`bi ${subscription ? 'bi-bell-slash' : 'bi-bell-fill'}`}></i> {subscription ? 'Disable Push Notifications' : 'Enable Push Notifications'}
                                     </button>
-
-                                    {subscription && (
-                                        <button type="button" onClick={sendTestPush} className="btn btn-outline-primary btn-sm">
-                                            <i className="bi bi-send"></i> Send Test
-                                        </button>
-                                    )}
                                 </div>
                             </div>
                         </div>
