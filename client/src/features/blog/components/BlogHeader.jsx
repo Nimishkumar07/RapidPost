@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-const BlogHeader = ({ blog, handleReadAloud, isReading }) => {
+const BlogHeader = ({ blog, user, handleReadAloud, isReading }) => {
     return (
         <header className="mb-4 mb-md-5">
             <div className="mb-3">
@@ -10,7 +10,7 @@ const BlogHeader = ({ blog, handleReadAloud, isReading }) => {
 
             {/* Author Info */}
             <div className="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
-                <Link to={`/users/${blog.author?._id}`} className="d-flex align-items-center text-decoration-none text-dark">
+                <Link to={user ? `/users/${blog.author?._id}` : '/login'} className="d-flex align-items-center text-decoration-none text-dark">
                     <img
                         src={blog.author?.avatar?.url || '/default-avatar.png'}
                         alt={blog.author?.name}

@@ -179,6 +179,7 @@ const BlogDetails = () => {
             <div className="container py-4" style={{ maxWidth: '64rem' }}>
                 <BlogHeader
                     blog={blog}
+                    user={user}
                     handleReadAloud={handleReadAloud}
                     isReading={isReading}
                 />
