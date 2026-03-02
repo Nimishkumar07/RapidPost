@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
 
 const BlogHeader = ({ blog, handleReadAloud, isReading }) => {
-    const { user } = useAuth();
     return (
         <header className="mb-4 mb-md-5">
             <div className="mb-3">
@@ -12,33 +10,18 @@ const BlogHeader = ({ blog, handleReadAloud, isReading }) => {
 
             {/* Author Info */}
             <div className="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
-                {user ? (
-                    <Link to={`/users/${blog.author?._id}`} className="d-flex align-items-center text-decoration-none text-dark">
-                        <img
-                            src={blog.author?.avatar?.url || '/default-avatar.png'}
-                            alt={blog.author?.name}
-                            className="rounded-circle me-3"
-                            style={{ width: '48px', height: '48px', objectFit: 'cover' }}
-                        />
-                        <div>
-                            <h3 className="h5 fw-semibold mb-1">{blog.author?.name}</h3>
-                            <p className="text-muted mb-0">{blog.author?.bio}</p>
-                        </div>
-                    </Link>
-                ) : ( 
-                    <Link to="/login" className="d-flex align-items-center text-decoration-none text-dark">
-                        <img
-                            src={blog.author?.avatar?.url || '/default-avatar.png'}
-                            alt={blog.author?.name}
-                            className="rounded-circle me-3"
-                            style={{ width: '48px', height: '48px', objectFit: 'cover' }}
-                        />
-                        <div>
-                            <h3 className="h5 fw-semibold mb-1">{blog.author?.name}</h3>
-                            <p className="text-muted mb-0">{blog.author?.bio}</p>
-                        </div>
-                    </Link>
-                )}
+                <Link to={`/users/${blog.author?._id}`} className="d-flex align-items-center text-decoration-none text-dark">
+                    <img
+                        src={blog.author?.avatar?.url || '/default-avatar.png'}
+                        alt={blog.author?.name}
+                        className="rounded-circle me-3"
+                        style={{ width: '48px', height: '48px', objectFit: 'cover' }}
+                    />
+                    <div>
+                        <h3 className="h5 fw-semibold mb-1">{blog.author?.name}</h3>
+                        <p className="text-muted mb-0">{blog.author?.bio}</p>
+                    </div>
+                </Link>
                 <div className="d-flex align-items-center gap-3">
                     <div className="d-flex align-items-center gap-3">
                         {/* Twitter */}
