@@ -7,23 +7,23 @@ class PushNotificationService {
         // Set VAPID keys (generated for your app)
         const vapidKeys = {
             publicKey: process.env.VAPID_PUBLIC_KEY,
-            privateKey: process.env.VAPID_PRIVATE_KEY 
+            privateKey: process.env.VAPID_PRIVATE_KEY
         };
 
         if (
-        process.env.VAPID_PUBLIC_KEY &&
-        process.env.VAPID_PRIVATE_KEY
+            process.env.VAPID_PUBLIC_KEY &&
+            process.env.VAPID_PRIVATE_KEY
         ) {
-        webpush.setVapidDetails(
-            'mailto:nimishkumar.india111@gmail.com', 
-            vapidKeys.publicKey,
-            vapidKeys.privateKey
-        );
+            webpush.setVapidDetails(
+                'mailto:nimishkumar.india111@gmail.com',
+                vapidKeys.publicKey,
+                vapidKeys.privateKey
+            );
         } else {
-        console.warn('[Push] VAPID keys missing, push disabled');
+            console.warn('[Push] VAPID keys missing, push disabled');
         }
 
-            this.publicKey = vapidKeys.publicKey;
+        this.publicKey = vapidKeys.publicKey;
     }
 
     // Get VAPID public key for client-side subscription
@@ -61,7 +61,7 @@ class PushNotificationService {
     async sendPushNotification(userId, notification) {
         try {
             const user = await User.findById(userId);
-            
+
             if (!user || !user.pushSubscriptions || user.pushSubscriptions.length === 0) {
                 console.log('No push subscriptions found for user:', userId);
                 return;
@@ -91,15 +91,23 @@ class PushNotificationService {
                 ]
             });
 
+            let successCount = 0;
+            let lastError = null;
+
             // Send to all user's subscriptions
             const pushPromises = user.pushSubscriptions.map(async (subscription) => {
                 try {
-                    await webpush.sendNotification(subscription, payload);
+                    // Mongoose subdocs must be plain objects for webpush
+                    const plainSub = typeof subscription.toObject === 'function' ? subscription.toObject() : subscription;
+
+                    await webpush.sendNotification(plainSub, payload);
                     console.log('Push notification sent successfully');
+                    successCount++;
                 } catch (error) {
-                    console.error('Error sending push notification:', error);
-                    
-                    // If subscription is invalid, remove it
+                    console.error('Error sending push notification:', error.message || error);
+                    lastError = error;
+
+                    // If subscription is invalid/expired, remove it
                     if (error.statusCode === 410 || error.statusCode === 404) {
                         await this.removePushSubscription(userId, subscription.endpoint);
                     }
@@ -107,8 +115,15 @@ class PushNotificationService {
             });
 
             await Promise.all(pushPromises);
+
+            if (successCount === 0 && user.pushSubscriptions.length > 0 && lastError) {
+                throw new Error(`Push delivery failed: ${lastError.message || lastError}`);
+            }
+
+            return { delivered: successCount, total: user.pushSubscriptions.length };
         } catch (error) {
             console.error('Error in sendPushNotification:', error);
+            throw error; // Bubble up
         }
     }
 
