@@ -35,7 +35,7 @@ const BlogForm = () => {
             const fetchBlog = async () => {
                 try {
                     const res = await blogService.getById(id);
-                    const blog = res.data;
+                    const blog = res.data.blog;
                     setFormData({
                         title: blog.title,
                         category: blog.category,
