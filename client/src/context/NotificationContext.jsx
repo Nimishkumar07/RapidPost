@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useRef } from 'react';
-import { useAuth } from './AuthContext'; 
+import { useAuth } from './AuthContext';
 import api from '../services/api';
 import { useToast } from '../context/ToastContext';
 
@@ -10,7 +10,7 @@ export const useNotification = () => useContext(NotificationContext);
 export const NotificationProvider = ({ children }) => {
     const { user, socket } = useAuth();
     const [unreadCount, setUnreadCount] = useState(0);
-    const [toast, setToast] = useState(null); 
+    const [toast, setToast] = useState(null);
     const [showPushPrompt, setShowPushPrompt] = useState(false);
     const [subscription, setSubscription] = useState(null);
     const { showToast } = useToast();
@@ -67,7 +67,7 @@ export const NotificationProvider = ({ children }) => {
         }
     };
 
-    
+
     useEffect(() => {
         if (!socket || !user) {
             return;
@@ -130,6 +130,10 @@ export const NotificationProvider = ({ children }) => {
     }, [user]);
 
     const urlBase64ToUint8Array = (base64String) => {
+        if (!base64String || typeof base64String !== 'string') {
+            throw new Error('Invalid VAPID public key provided by the server.');
+        }
+
         const padding = '='.repeat((4 - base64String.length % 4) % 4);
         const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
         const rawData = window.atob(base64);
@@ -144,21 +148,26 @@ export const NotificationProvider = ({ children }) => {
         try {
             const registration = await navigator.serviceWorker.ready;
             const res = await api.get('/notifications/api/push/vapid-public-key');
-            const publicKey = res.data.publicKey;
+            const publicKey = res?.data?.publicKey;
+
+            if (!publicKey) {
+                showToast("Push notifications are currently unavailable.", "error");
+                return false;
+            }
 
             const newSub = await registration.pushManager.subscribe({
                 userVisibleOnly: true,
-                applicationServerKey: urlBase64ToUint8Array(publicKey)
+                applicationServerKey: urlBase64ToUint8Array(publicKey) // Now protected
             });
 
             await api.post('/notifications/api/push/subscribe', { subscription: newSub });
             setSubscription(newSub);
             setShowPushPrompt(false);
-            showToast("Push notifications enabled!");
+            showToast("Push notifications enabled!", "success");
             return true;
         } catch (e) {
-            console.error(e);
-            showToast("Failed to enable push notifications");
+            console.error("Push subscription error:", e);
+            showToast(e.message || "Failed to enable push notifications", "error");
             return false;
         }
     };
