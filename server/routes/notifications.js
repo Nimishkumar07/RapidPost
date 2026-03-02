@@ -15,8 +15,7 @@ import {
 import {
     getVapidPublicKey,
     subscribeToPush,
-    unsubscribeFromPush,
-    sendTestPush
+    unsubscribeFromPush
 } from '../controllers/pushNotifications.js';
 
 const router = express.Router();
@@ -42,6 +41,5 @@ router.delete('/api/:id', deleteNotification);
 router.get('/api/push/vapid-public-key', getVapidPublicKey);
 router.post('/api/push/subscribe', subscribeToPush);
 router.post('/api/push/unsubscribe', unsubscribeFromPush);
-router.post('/api/push/test', sendTestPush);
 
 export default router;

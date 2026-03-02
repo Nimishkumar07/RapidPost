@@ -145,18 +145,6 @@ class PushNotificationService {
         }
         return '/notifications';
     }
-
-    // Test push notification
-    async sendTestNotification(userId) {
-        const testNotification = {
-            _id: 'test',
-            type: 'like',
-            message: 'This is a test push notification!',
-            relatedBlog: null
-        };
-
-        await this.sendPushNotification(userId, testNotification);
-    }
 }
 
 export default new PushNotificationService();
