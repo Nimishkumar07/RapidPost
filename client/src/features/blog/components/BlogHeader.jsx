@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
 
 const BlogHeader = ({ blog, handleReadAloud, isReading }) => {
+    const { user } = useAuth();
     return (
         <header className="mb-4 mb-md-5">
             <div className="mb-3">
