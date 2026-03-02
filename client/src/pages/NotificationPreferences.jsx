@@ -55,13 +55,14 @@ const NotificationPreferences = () => {
 
     const sendTestPush = async () => {
         try {
-            const res = await api.post('/notifications/api/push/test');
-            if (res.data.success) showToast("Test notification sent!", "success");
+            await api.post('/notifications/api/push/test');
+            showToast("Test notification sent successfully", "info");
         } catch (err) {
-            console.error(err);
-            showToast("Failed to send test push", "error");
+            console.error("Test push error:", err);
+            const errorMsg = err.response?.data?.message || "Failed to send test notification";
+            showToast(errorMsg, "error");
         }
-    }
+    };
 
     if (loading) return (
         <div className="d-flex justify-content-center mt-5">
