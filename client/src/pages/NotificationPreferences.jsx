@@ -13,7 +13,6 @@ const NotificationPreferences = () => {
         newPosts: true
     });
     const [loading, setLoading] = useState(true);
-    const [saving, setSaving] = useState(false);
     const { showToast } = useToast();
 
     useEffect(() => {
@@ -30,21 +29,19 @@ const NotificationPreferences = () => {
         fetchPreferences();
     }, []);
 
-    const handleToggle = (key) => {
-        setPreferences(prev => ({ ...prev, [key]: !prev[key] }));
-    };
+    const handleToggle = async (key) => {
+        const newPreferences = { ...preferences, [key]: !preferences[key] };
+        setPreferences(newPreferences);
 
-    const handleSave = async (e) => {
-        e.preventDefault();
-        setSaving(true);
+        // Auto-save the preference
         try {
-            await api.post('/notifications/api/preferences', { preferences });
-            showToast("Preferences saved successfully!", "success");
+            await api.post('/notifications/api/preferences', { preferences: newPreferences });
+            showToast("Preferences updated", "success");
         } catch (err) {
             console.error(err);
-            showToast("Failed to save preferences", "error");
-        } finally {
-            setSaving(false);
+            showToast("Failed to update preferences", "error");
+            // Revert on failure
+            setPreferences(preferences);
         }
     };
 
@@ -81,7 +78,7 @@ const NotificationPreferences = () => {
                         <p className="text-muted mb-0">Choose which notifications you want to receive</p>
                     </div>
                     <div className="card-body">
-                        <form onSubmit={handleSave}>
+                        <div>
                             {/* Likes */}
                             <div className="mb-4">
                                 <div className="form-check form-switch">
@@ -176,13 +173,7 @@ const NotificationPreferences = () => {
                                     )}
                                 </div>
                             </div>
-
-                            <div className="d-grid gap-2">
-                                <button type="submit" className="btn btn-primary" disabled={saving}>
-                                    {saving ? <><i className="bi bi-hourglass-split"></i> Saving...</> : <><i className="bi bi-check-lg"></i> Save Preferences</>}
-                                </button>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
