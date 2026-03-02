@@ -2,12 +2,12 @@ if (process.env.NODE_ENV != "production") {
     'dotenv/config'
 }
 
+import 'dotenv/config'
 import express from 'express'
 const app = express()
 import { createServer } from 'http'
 import mongoose from 'mongoose'
 import cors from 'cors'
-import 'dotenv/config'
 import multer from 'multer'
 import path from 'path'
 import methodOverride from 'method-override'
