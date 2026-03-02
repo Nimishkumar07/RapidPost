@@ -1,12 +1,32 @@
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { useEffect, useState } from 'react';
-import './simple-editor.css'; 
+import Link from '@tiptap/extension-link';
+import { useCallback, useEffect, useState } from 'react';
+import './simple-editor.css';
 
 const MenuBar = ({ editor }) => {
     if (!editor) {
         return null;
     }
+
+    const setLink = useCallback(() => {
+        const previousUrl = editor.getAttributes('link').href;
+        const url = window.prompt('URL', previousUrl);
+
+        // cancelled
+        if (url === null) {
+            return;
+        }
+
+        // empty
+        if (url === '') {
+            editor.chain().focus().extendMarkRange('link').unsetLink().run();
+            return;
+        }
+
+        // update link
+        editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+    }, [editor]);
 
     return (
         <div className="btn-toolbar mb-2 gap-1 p-2 border-bottom bg-light rounded-top">
@@ -79,6 +99,32 @@ const MenuBar = ({ editor }) => {
             >
                 <i className="bi bi-list-ol"></i>
             </button>
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+                className={` border-0 rounded ${editor.isActive('codeBlock') ? 'bg-tertiary' : 'bg-transparent'}`}
+                title="Code Block"
+            >
+                <i className="bi bi-code-square"></i>
+            </button>
+            <div className="vr mx-1"></div>
+            <button
+                type="button"
+                onClick={setLink}
+                className={` border-0 rounded ${editor.isActive('link') ? 'bg-tertiary' : 'bg-transparent'}`}
+                title="Add Link"
+            >
+                <i className="bi bi-link"></i>
+            </button>
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().unsetLink().run()}
+                disabled={!editor.isActive('link')}
+                className="border-0 rounded bg-transparent"
+                title="Unlink"
+            >
+                <i className="bi bi-link-45deg"></i>
+            </button>
             <div className="vr mx-1"></div>
             {/* <button
                 type="button"
@@ -107,6 +153,11 @@ export const SimpleEditor = ({ content, onChange, isRequired = false }) => {
     const editor = useEditor({
         extensions: [
             StarterKit,
+            Link.configure({
+                openOnClick: false,
+                autolink: true,
+                defaultProtocol: 'https',
+            }),
         ],
         content: content || '',
         onUpdate: ({ editor }) => {
@@ -122,7 +173,7 @@ export const SimpleEditor = ({ content, onChange, isRequired = false }) => {
     useEffect(() => {
         if (editor && content && editor.getHTML() !== content) {
             // Only update if focused to avoid overwriting while typing, 
-            
+
             if (!editor.isFocused) {
                 editor.commands.setContent(content);
             }
@@ -143,7 +194,7 @@ export const SimpleEditor = ({ content, onChange, isRequired = false }) => {
                 required={isRequired}
                 value={editor && !editor.isEmpty ? 'valid' : ''}
                 onChange={() => { }}
-                onInvalid={(e) => e.preventDefault()} 
+                onInvalid={(e) => e.preventDefault()}
             />
             {editor && editor.isEmpty && isRequired && <div className="invalid-feedback">Please provide content</div>}
         </div>

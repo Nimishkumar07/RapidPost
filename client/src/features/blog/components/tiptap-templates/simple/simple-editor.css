@@ -4,6 +4,28 @@
     min-height: 280px;
 }
 
+.simple-editor-wrapper .ProseMirror a {
+    color: #428bca;
+    /* Standard link blue */
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.simple-editor-wrapper .ProseMirror pre {
+    background: #2d2d2d;
+    color: #ccc;
+    font-family: 'JetBrainsMono', monospace;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+}
+
+.simple-editor-wrapper .ProseMirror pre code {
+    color: inherit;
+    padding: 0;
+    background: none;
+    font-size: 0.9em;
+}
+
 .simple-editor-wrapper .ProseMirror p.is-editor-empty:first-child::before {
     color: #adb5bd;
     content: "Start writing...";
