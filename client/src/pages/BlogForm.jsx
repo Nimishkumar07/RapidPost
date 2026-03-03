@@ -272,6 +272,8 @@ const BlogForm = () => {
                                         <option value="Travel">Travel</option>
                                         <option value="Food">Food</option>
                                         <option value="Education">Education</option>
+                                        <option value="Spiritual">Spiritual</option>
+                                        <option value="Fiction">Fiction</option>
                                     </select>
                                     <div className="invalid-feedback">Please select a category</div>
                                 </div>
