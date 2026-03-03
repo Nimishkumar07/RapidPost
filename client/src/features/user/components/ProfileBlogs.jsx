@@ -43,7 +43,7 @@ const ProfileBlogs = ({ user, isMe, handleDeleteBlog, handleSaveBlog }) => {
                                 <div className="text-muted small d-flex gap-3">
                                     <div>
                                         <i className="bi bi-calendar2 me-1"></i>
-                                        {new Date(blog.createdAt).toLocaleDateString()}
+                                        {new Date(blog.createdAt).toLocaleDateString('en-GB')}
                                     </div>
                                     <span title="Views"><i className="bi bi-eye me-1"></i> {blog.views}</span>
                                     <span title="Likes"><i className="bi bi-heart me-1"></i> {blog.likes?.length || 0}</span>
@@ -100,7 +100,7 @@ const ProfileBlogs = ({ user, isMe, handleDeleteBlog, handleSaveBlog }) => {
                                         <div className="text-muted small d-flex gap-3">
                                             <div>
                                                 <i className="bi bi-calendar2 me-1"></i>
-                                                {new Date(blog.createdAt).toLocaleDateString()}
+                                                {new Date(blog.createdAt).toLocaleDateString('en-GB')}
                                             </div>
                                             <span title="Views"><i className="bi bi-eye me-1"></i> {blog.views}</span>
                                             <span title="Likes"><i className="bi bi-heart me-1"></i> {blog.likes?.length || 0}</span>

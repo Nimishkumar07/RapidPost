@@ -67,7 +67,7 @@ const BlogHeader = ({ blog, user, handleReadAloud, isReading }) => {
             <div className="d-flex align-items-center gap-4 text-muted border-bottom pb-3">
                 <span className="d-inline-flex align-items-center">
                     <i className="fa-regular fa-calendar me-2"></i>
-                    {new Date(blog.createdAt).toLocaleDateString()}
+                    {new Date(blog.createdAt).toLocaleDateString('en-GB')}
                 </span>
                 <span className="d-inline-flex align-items-center">
                     <i className="fa-solid fa-eye me-2"></i>

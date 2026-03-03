@@ -49,7 +49,7 @@ const BlogCard = ({ blog, highlightedBlogId }) => {
                                         {blog.author?.name}
                                     </span>
                                     <span className="small text-muted">
-                                        {new Date(blog.createdAt).toLocaleDateString()}
+                                        {new Date(blog.createdAt).toLocaleDateString('en-GB')}
                                     </span>
                                 </div>
                             </div>

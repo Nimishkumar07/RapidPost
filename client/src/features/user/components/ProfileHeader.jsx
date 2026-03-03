@@ -77,7 +77,7 @@ const ProfileHeader = ({ user, currentUser, isMe, isFollowing, handleFollow, sta
                 </div>
                 <div className="d-flex align-items-center gap-2 text-muted small mt-4">
                     <i className="bi bi-calendar2"></i>
-                    <span>Joined {new Date(user.createdAt).toLocaleDateString()}</span>
+                    <span>Joined {new Date(user.createdAt).toLocaleDateString('en-GB')}</span>
                 </div>
             </div>
         </div>
@@ -187,7 +187,7 @@ const ProfileHeaderSafe = ({ user, currentUser, isMe, isFollowing, handleFollow,
                 </div>
                 <div className="d-flex align-items-center gap-2 text-muted small mt-4">
                     <i className="bi bi-calendar2"></i>
-                    <span>Joined {new Date(user.createdAt).toLocaleDateString()}</span>
+                    <span>Joined {new Date(user.createdAt).toLocaleDateString('en-GB')}</span>
                 </div>
             </div>
         </div>
