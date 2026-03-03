@@ -198,7 +198,7 @@ const Home = () => {
                 <div className="d-flex flex-column align-items-center text-center">
                     <h1 className="h3 h1-md fw-semibold">Never Miss a Blog!</h1>
                     <p className="text-muted mb-4">Subscribe to get the latest blog, new tech, and exclusive news.</p>
-                    <form action="" method="POST" className="w-100" style={{ maxWidth: '48rem' }}>
+                    <form action="" className="w-100" style={{ maxWidth: '48rem' }}>
                         <div className="input-group">
                             <input type="email" className="form-control" name="email" placeholder="Enter your email id" required />
                             <button className="btn px-4 px-md-5" type="submit">Subscribe</button>
