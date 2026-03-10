@@ -2,6 +2,9 @@
 .simple-editor-wrapper .ProseMirror {
     outline: none;
     min-height: 280px;
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .simple-editor-wrapper .ProseMirror a {
