@@ -1,13 +1,14 @@
 import { GoogleGenAI } from "@google/genai";
 
 
-const ai = new GoogleGenAI({apiKey:process.env.GEMINI_API_KEY});
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-async function main(prompt,tone,length,format) {
-  
+async function main(prompt, tone, length, format, language = 'English') {
+
   const systemPrompt = `
     You are a blog content generator.
     Write in a ${tone} tone.
+    Output Language: ${language}.
     Length: ${length}.
     Format: ${format}.
     Topic: ${prompt}.
@@ -27,9 +28,9 @@ async function main(prompt,tone,length,format) {
     contents: [{ type: "text", text: systemPrompt }],
   });
 
-  
-// console.log("Gemini raw response:", JSON.stringify(result, null, 2));
- return result?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+
+  // console.log("Gemini raw response:", JSON.stringify(result, null, 2));
+  return result?.candidates?.[0]?.content?.parts?.[0]?.text || "";
 }
 
 export default main;

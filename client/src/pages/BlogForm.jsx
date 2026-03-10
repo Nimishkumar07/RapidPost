@@ -21,12 +21,12 @@ const BlogForm = () => {
         image: null
     });
 
-    // AI State
     const [aiParams, setAiParams] = useState({
         prompt: '',
         tone: 'professional',
         length: 'short',
-        format: 'Blog'
+        format: 'Blog',
+        language: 'English'
     });
     const [aiGenerating, setAiGenerating] = useState(false);
 
@@ -171,7 +171,7 @@ const BlogForm = () => {
                                 ></textarea>
                             </div>
                             <div className="row g-3 mb-3">
-                                <div className="col-12 col-md-4">
+                                <div className="col-12 col-md-3">
                                     <label className="form-label">Tone</label>
                                     <select
                                         className="form-select"
@@ -184,7 +184,7 @@ const BlogForm = () => {
                                         <option value="creative">Creative</option>
                                     </select>
                                 </div>
-                                <div className="col-12 col-md-4">
+                                <div className="col-12 col-md-3">
                                     <label className="form-label">Length</label>
                                     <select
                                         className="form-select"
@@ -196,7 +196,7 @@ const BlogForm = () => {
                                         <option value="long">Long (1500+)</option>
                                     </select>
                                 </div>
-                                <div className="col-12 col-md-4">
+                                <div className="col-12 col-md-3">
                                     <label className="form-label">Format</label>
                                     <select
                                         className="form-select"
@@ -207,6 +207,22 @@ const BlogForm = () => {
                                         <option value="article">Article</option>
                                         <option value="tutorial">Tutorial</option>
                                         <option value="guide">How-to Guide</option>
+                                    </select>
+                                </div>
+                                <div className="col-12 col-md-3">
+                                    <label className="form-label">Language</label>
+                                    <select
+                                        className="form-select"
+                                        value={aiParams.language}
+                                        onChange={e => setAiParams({ ...aiParams, language: e.target.value })}
+                                    >
+                                        <option value="English">English</option>
+                                        <option value="Hindi">Hindi</option>
+                                        <option value="Tamil">Tamil</option>
+                                        <option value="Telugu">Telugu</option>
+                                        <option value="Bengali">Bengali</option>
+                                        <option value="Marathi">Marathi</option>
+                                        <option value="Kannada">Kannada</option>
                                     </select>
                                 </div>
                             </div>

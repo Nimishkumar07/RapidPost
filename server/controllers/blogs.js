@@ -191,15 +191,14 @@ export const destroyBlog = async (req, res) => {
 
 // generate with ai
 export const generateBlog = async (req, res) => {
-    const { prompt, tone, length, format } = req.body;
+    const { prompt, tone, length, format, language } = req.body;
 
     if (!prompt) {
         return res.status(400).json({ success: false, error: "Prompt required" });
     }
 
-
     try {
-        const content = await main(prompt, tone, length, format);
+        const content = await main(prompt, tone, length, format, language || 'English');
 
         res.json({ success: true, content });
     } catch (err) {
