@@ -12,13 +12,11 @@ async function main(prompt, tone, length, format, language = 'English') {
     Length: ${length}.
     Format: ${format}.
     Topic: ${prompt}.
-    Generate a plain HTML ONLY (no markdown, no code fences ) content (paragraphs, headings, lists) that can be inserted into a blog editor.
+    Generate plain HTML ONLY (no markdown, no code fences) that can be inserted into a rich text blog editor.
     Format requirements:
-    Use clean HTML with <h1>, <h2>, <h3>, and <p> tags for structure.
-    Do NOT use <ul>, <ol>, or <li>.
-    Instead, when you need a list, write it as plain text inside <p>, with each item starting with '-' or '•'.
-    Do not wrap lists in extra HTML tags, just simple <p> blocks with dashes or bullets.
-     Do not include any  fences or code blocks.
+    - Use clean HTML tags for structure: <h1>, <h2>, <h3>, <p>, <ul>, <ol>, <li>, <strong>, <em>.
+    - You may use HTML <table> tags if presenting tabular data.
+    - Do not include any HTML markdown code fences (e.g. \`\`\`html). Just purely the raw HTML content.
     Ensure the content is well-structured, readable, and visually appealing when rendered in a blog.
   `;
 
