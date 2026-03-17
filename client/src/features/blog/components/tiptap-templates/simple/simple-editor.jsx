@@ -1,9 +1,14 @@
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
+import Table from '@tiptap/extension-table';
+import TableCell from '@tiptap/extension-table-cell';
+import TableHeader from '@tiptap/extension-table-header';
+import TableRow from '@tiptap/extension-table-row';
+import { Color } from '@tiptap/extension-color';
+import TextStyle from '@tiptap/extension-text-style';
 import { useCallback, useEffect, useState } from 'react';
 import './simple-editor.css';
-
 const MenuBar = ({ editor }) => {
     if (!editor) {
         return null;
@@ -30,6 +35,25 @@ const MenuBar = ({ editor }) => {
 
     return (
         <div className="btn-toolbar mb-2 gap-1 p-2 border-bottom bg-light rounded-top">
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().undo().run()}
+                disabled={!editor.can().chain().focus().undo().run()}
+                className="border-0 rounded bg-transparent"
+                title="Undo"
+            >
+                <i className="bi bi-arrow-counterclockwise"></i>
+            </button>
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().redo().run()}
+                disabled={!editor.can().chain().focus().redo().run()}
+                className="border-0 rounded bg-transparent"
+                title="Redo"
+            >
+                <i className="bi bi-arrow-clockwise"></i>
+            </button>
+            <div className="vr mx-1"></div>
             <button
                 type="button"
                 onClick={() => editor.chain().focus().toggleBold().run()}
@@ -142,6 +166,52 @@ const MenuBar = ({ editor }) => {
             >
                 <i className="bi bi-hr"></i>
             </button>
+            <div className="vr mx-1"></div>
+            <input
+                type="color"
+                onInput={event => editor.chain().focus().setColor(event.target.value).run()}
+                value={editor.getAttributes('textStyle').color || '#000000'}
+                title="Text Color"
+                className="border-0 bg-transparent"
+                style={{ width: '30px', height: '30px', padding: 0 }}
+            />
+            <div className="vr mx-1"></div>
+            <button
+                type="button"
+                onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()}
+                className="border-0 rounded bg-transparent"
+                title="Insert Table"
+            >
+                <i className="bi bi-table"></i>
+            </button>
+            {editor.isActive('table') && (
+                <>
+                    <button
+                        type="button"
+                        onClick={() => editor.chain().focus().addColumnBefore().run()}
+                        className="border-0 rounded bg-transparent"
+                        title="Add Column Before"
+                    >
+                        <i className="bi bi-layout-three-columns"></i>
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => editor.chain().focus().addRowAfter().run()}
+                        className="border-0 rounded bg-transparent"
+                        title="Add Row After"
+                    >
+                        <i className="bi bi-layout-text-window-reverse"></i>
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => editor.chain().focus().deleteTable().run()}
+                        className="border-0 rounded bg-transparent text-danger"
+                        title="Delete Table"
+                    >
+                        <i className="bi bi-trash"></i>
+                    </button>
+                </>
+            )}
         </div>
     );
 };
@@ -158,6 +228,14 @@ export const SimpleEditor = ({ content, onChange, isRequired = false }) => {
                 autolink: true,
                 defaultProtocol: 'https',
             }),
+            Table.configure({
+                resizable: true,
+            }),
+            TableRow,
+            TableHeader,
+            TableCell,
+            TextStyle,
+            Color,
         ],
         content: content || '',
         onUpdate: ({ editor }) => {

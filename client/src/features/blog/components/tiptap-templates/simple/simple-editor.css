@@ -46,3 +46,38 @@
 .was-validated input:invalid+.simple-editor-wrapper {
     border-color: #dc3545 !important;
 }
+
+/* Table Styles */
+.simple-editor-wrapper .ProseMirror table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+.simple-editor-wrapper .ProseMirror table td,
+.simple-editor-wrapper .ProseMirror table th {
+    min-width: 1em;
+    border: 1px solid #ced4da;
+    padding: 3px 5px;
+    vertical-align: top;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.simple-editor-wrapper .ProseMirror table th {
+    font-weight: bold;
+    text-align: left;
+    background-color: #f8f9fa;
+}
+
+.simple-editor-wrapper .ProseMirror table .column-resize-handle {
+    background-color: #0d6efd;
+    bottom: -2px;
+    position: absolute;
+    right: -1.5px;
+    pointer-events: none;
+    top: 0;
+    width: 3px;
+}
