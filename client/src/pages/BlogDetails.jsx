@@ -63,6 +63,24 @@ const BlogDetails = () => {
         const text = new DOMParser().parseFromString(blog.description, 'text/html').body.textContent;
         if (!text.trim()) return;
 
+        // Basic language detection heuristic based on Unicode character blocks
+        const isDevanagari = /[\u0900-\u097F]/.test(text); // Hindi, Marathi, Nepali, Sanskrit, etc.
+        const isGujarati = /[\u0A80-\u0AFF]/.test(text); // Gujarati
+        const isBengali = /[\u0980-\u09FF]/.test(text);  // Bengali
+        const isTamil = /[\u0B80-\u0BFF]/.test(text);    // Tamil
+        const isTelugu = /[\u0C00-\u0C7F]/.test(text);   // Telugu
+        const isKannada = /[\u0C80-\u0CFF]/.test(text);  // Kannada
+        const isMalayalam = /[\u0D00-\u0D7F]/.test(text);// Malayalam
+
+        let langCode = 'en-IN';
+        if (isDevanagari) langCode = 'hi-IN';
+        else if (isGujarati) langCode = 'gu-IN';
+        else if (isBengali) langCode = 'bn-IN';
+        else if (isTamil) langCode = 'ta-IN';
+        else if (isTelugu) langCode = 'te-IN';
+        else if (isKannada) langCode = 'kn-IN';
+        else if (isMalayalam) langCode = 'ml-IN';
+
         window.speechSynthesis.cancel();
         setIsReading(true);
 
@@ -90,11 +108,15 @@ const BlogDetails = () => {
             // Mobile voice fix
             const voices = window.speechSynthesis.getVoices();
             if (voices.length > 0) {
-                const preferredVoice = voices.find(v => v.lang.includes('en')) || voices[0];
+                const langPrefix = langCode.split('-')[0];
+                const preferredVoice = voices.find(v => v.lang.startsWith(langPrefix)) || 
+                                       voices.find(v => v.lang.includes(langPrefix)) || 
+                                       voices.find(v => v.lang.includes('en')) || 
+                                       voices[0];
                 utterance.voice = preferredVoice;
             }
 
-            utterance.lang = "en-IN";
+            utterance.lang = langCode;
             utterance.rate = 1;
 
             utterance.onend = () => {
