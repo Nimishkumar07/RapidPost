@@ -173,7 +173,7 @@ const MenuBar = ({ editor }) => {
                 value={editor.getAttributes('textStyle').color || '#000000'}
                 title="Text Color"
                 className="border-0 bg-transparent"
-                style={{ width: '30px', height: '30px', padding: 0 }}
+                style={{ width: '16px', height: '16px', padding: 0 }}
             />
             <div className="vr mx-1"></div>
             <button
