@@ -14,8 +14,9 @@ RapidPost is a modern, full-stack blogging platform powered by AI. It features a
 
 ### 🤖 **AI & Content**
 - **AI-Powered Writing**: Generate blog content in seconds using Google Gemini AI (customizable tone, length, format, and language).
-- **Multilingual Support**: Generate content in English, Hindi, Tamil, Telugu, Bengali, Marathi, and Kannada.
-- **Rich Text Editor**: Full WYSIWYG editor for manual writing.
+- **Voice Typing (Web Speech API)**: Built-in Speech-to-Text allows users to perfectly transcribe spoken words natively into the text editor in over 10 languages without physical hardware keyboards.
+- **Multilingual Support**: Write, generate, or speak content in English, Hindi, Tamil, Telugu, Bengali, Marathi, Gujarati, Kannada, and Malayalam.
+- **Rich Text Editor**: Full WYSIWYG Tiptap editor featuring advanced formatting (Undo/Redo history, Tables, Text Colors, Lists) for manual writing context.
 - **Read Aloud**: Integrated text-to-speech for accessible content consumption.
 
 ### 📱 **Real-Time Experience**
