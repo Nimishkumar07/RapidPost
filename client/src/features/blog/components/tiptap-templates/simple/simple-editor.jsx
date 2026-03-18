@@ -7,9 +7,59 @@ import { TableHeader } from '@tiptap/extension-table-header';
 import { TableRow } from '@tiptap/extension-table-row';
 import { Color } from '@tiptap/extension-color';
 import { TextStyle } from '@tiptap/extension-text-style';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import './simple-editor.css';
+
 const MenuBar = ({ editor }) => {
+    const [isListening, setIsListening] = useState(false);
+    const [speechLang, setSpeechLang] = useState('hi-IN');
+    const recognitionRef = useRef(null);
+
+    // Initialize speech recognition
+    useEffect(() => {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+            const recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = false; // Set to false to only get final words mapped cleanly
+            
+            recognition.onresult = (event) => {
+                let finalTranscript = '';
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        finalTranscript += event.results[i][0].transcript + ' ';
+                    }
+                }
+                if (finalTranscript && editor) {
+                    editor.chain().focus().insertContent(finalTranscript).run();
+                }
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error', event.error);
+                setIsListening(false);
+            };
+
+            recognition.onend = () => {
+                setIsListening(false);
+            };
+
+            recognitionRef.current = recognition;
+        }
+    }, [editor]);
+
+    const toggleListening = useCallback(() => {
+        if (!recognitionRef.current) return alert("Your browser doesn't support voice typing. Try Google Chrome.");
+        
+        if (isListening) {
+            recognitionRef.current.stop();
+        } else {
+            recognitionRef.current.lang = speechLang;
+            recognitionRef.current.start();
+            setIsListening(true);
+        }
+    }, [isListening, speechLang]);
+
     if (!editor) {
         return null;
     }
@@ -212,6 +262,38 @@ const MenuBar = ({ editor }) => {
                     </button>
                 </>
             )}
+            <div className="vr mx-1"></div>
+            <select 
+                value={speechLang} 
+                onChange={(e) => {
+                    setSpeechLang(e.target.value);
+                    if (isListening) {
+                        recognitionRef.current.stop();
+                    }
+                }} 
+                className="form-select form-select-sm border-0 bg-transparent"
+                style={{ width: 'auto', minWidth: '100px', cursor: 'pointer' }}
+                title="Voice Typing Language"
+            >
+                <option value="hi-IN">Hindi</option>
+                <option value="en-US">English</option>
+                <option value="es-ES">Spanish</option>
+                <option value="fr-FR">French</option>
+                <option value="de-DE">German</option>
+                <option value="ja-JP">Japanese</option>
+                <option value="ko-KR">Korean</option>
+                <option value="zh-CN">Chinese</option>
+                <option value="ru-RU">Russian</option>
+                <option value="ar-SA">Arabic</option>
+            </select>
+            <button
+                type="button"
+                onClick={toggleListening}
+                className={`border-0 rounded ${isListening ? 'bg-danger text-white pulse-animation' : 'bg-transparent'}`}
+                title={isListening ? 'Stop Voice Typing' : 'Start Voice Typing'}
+            >
+                <i className={`bi ${isListening ? 'bi-mic-fill' : 'bi-mic'}`}></i>
+            </button>
         </div>
     );
 };
