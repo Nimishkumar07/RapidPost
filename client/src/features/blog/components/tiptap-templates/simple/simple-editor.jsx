@@ -12,7 +12,7 @@ import './simple-editor.css';
 
 const MenuBar = ({ editor }) => {
     const [isListening, setIsListening] = useState(false);
-    const [speechLang, setSpeechLang] = useState('hi-IN');
+    const [speechLang, setSpeechLang] = useState('en-IN');
     const recognitionRef = useRef(null);
 
     // Initialize speech recognition
@@ -275,16 +275,14 @@ const MenuBar = ({ editor }) => {
                 style={{ width: 'auto', minWidth: '100px', cursor: 'pointer' }}
                 title="Voice Typing Language"
             >
+                <option value="en-IN">English</option>
                 <option value="hi-IN">Hindi</option>
-                <option value="en-US">English</option>
-                <option value="es-ES">Spanish</option>
-                <option value="fr-FR">French</option>
-                <option value="de-DE">German</option>
-                <option value="ja-JP">Japanese</option>
-                <option value="ko-KR">Korean</option>
-                <option value="zh-CN">Chinese</option>
-                <option value="ru-RU">Russian</option>
-                <option value="ar-SA">Arabic</option>
+                <option value="ta-IN">Tamil</option>
+                <option value="gu-IN">Gujarati</option>
+                <option value="bn-IN">Bengali</option>
+                <option value="te-IN">Telugu</option>
+                <option value="kn-IN">Kannada</option>
+                <option value="ml-IN">Malayalam</option>
             </select>
             <button
                 type="button"

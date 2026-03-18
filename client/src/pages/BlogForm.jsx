@@ -222,7 +222,9 @@ const BlogForm = () => {
                                         <option value="Telugu">Telugu</option>
                                         <option value="Bengali">Bengali</option>
                                         <option value="Marathi">Marathi</option>
+                                        <option value="Gujarati">Gujarati</option>
                                         <option value="Kannada">Kannada</option>
+                                        <option value="Malayalam">Malayalam</option>
                                     </select>
                                 </div>
                             </div>
