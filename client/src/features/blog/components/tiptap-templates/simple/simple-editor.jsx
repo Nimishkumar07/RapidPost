@@ -280,6 +280,7 @@ const MenuBar = ({ editor }) => {
                 <option value="ta-IN">Tamil</option>
                 <option value="gu-IN">Gujarati</option>
                 <option value="bn-IN">Bengali</option>
+                <option value="mr-IN">Marathi</option>
                 <option value="te-IN">Telugu</option>
                 <option value="kn-IN">Kannada</option>
                 <option value="ml-IN">Malayalam</option>
