@@ -16,11 +16,13 @@ const Home = () => {
     // get query params
     const q = searchParams.get('q') || '';
     const category = searchParams.get('category') || 'All';
+    const page = parseInt(searchParams.get('page')) || 1;
 
     // state for local input value and fetching indicator
     const [searchTerm, setSearchTerm] = useState(q);
     const [isFetching, setIsFetching] = useState(false);
     const [highlightedBlogId, setHighlightedBlogId] = useState(null);
+    const [totalPages, setTotalPages] = useState(1);
 
     // sync state with URL only if they differ significantly (navigating back/forward)
     // This prevents cursor jumping if we were to just set it blindly, though with simple input it's usually fine.
@@ -77,12 +79,17 @@ const Home = () => {
         const handler = setTimeout(() => {
             setSearchParams(prev => {
                 const newParams = new URLSearchParams(prev);
-                if (searchTerm) {
-                    newParams.set('q', searchTerm);
-                } else {
-                    newParams.delete('q');
+                const prevQ = prev.get('q') || '';
+                if (searchTerm !== prevQ) {
+                    if (searchTerm) {
+                        newParams.set('q', searchTerm);
+                    } else {
+                        newParams.delete('q');
+                    }
+                    newParams.delete('page'); // Reset to page 1 on new search
+                    return newParams;
                 }
-                return newParams;
+                return prev;
             });
         }, 300); // 300ms delay 
 
@@ -97,10 +104,15 @@ const Home = () => {
                 const paramsObj = {};
                 if (q) paramsObj.q = q;
                 if (category && category !== 'All') paramsObj.category = category;
+                paramsObj.page = page;
+                paramsObj.limit = 9;
 
                 const response = await blogService.getAll(paramsObj);
 
                 setBlogs(response.data.allBlogs || response.data);
+                if (response.data.pagination) {
+                    setTotalPages(response.data.pagination.totalPages);
+                }
             } catch (err) {
                 console.error("Error fetching blogs:", err);
                 setError('Failed to fetch blogs');
@@ -110,7 +122,7 @@ const Home = () => {
             }
         };
         fetchBlogs();
-    }, [q, category]);
+    }, [q, category, page]);
 
     const handleSearch = (e) => {
         e.preventDefault();
@@ -122,6 +134,7 @@ const Home = () => {
             } else {
                 newParams.delete('q');
             }
+            newParams.delete('page');
             return newParams;
         });
     };
@@ -137,6 +150,7 @@ const Home = () => {
             } else {
                 newParams.delete('q');
             }
+            newParams.delete('page');
             return newParams;
         });
     };
@@ -148,8 +162,20 @@ const Home = () => {
         setSearchParams(prev => {
             const n = new URLSearchParams(prev);
             n.delete('q');
+            n.delete('page');
             return n;
         });
+    };
+
+    const handlePageChange = (newPage) => {
+        if (newPage >= 1 && newPage <= totalPages) {
+            setSearchParams(prev => {
+                const newParams = new URLSearchParams(prev);
+                newParams.set('page', newPage);
+                return newParams;
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     };
 
     if (loading) return (
@@ -193,6 +219,24 @@ const Home = () => {
                     />
                 ))}
             </div>
+
+            {totalPages > 1 && (
+                <nav aria-label="Blog pagination" className="mt-5 mb-4">
+                    <ul className="pagination justify-content-center">
+                        <li className={`page-item ${page <= 1 ? 'disabled' : ''}`}>
+                            <button className="page-link shadow-none" onClick={() => handlePageChange(page - 1)}>&laquo; Previous</button>
+                        </li>
+                        {[...Array(totalPages)].map((_, i) => (
+                            <li key={i + 1} className={`page-item ${page === i + 1 ? 'active' : ''}`}>
+                                <button className="page-link shadow-none" onClick={() => handlePageChange(i + 1)}>{i + 1}</button>
+                            </li>
+                        ))}
+                        <li className={`page-item ${page >= totalPages ? 'disabled' : ''}`}>
+                            <button className="page-link shadow-none" onClick={() => handlePageChange(page + 1)}>Next &raquo;</button>
+                        </li>
+                    </ul>
+                </nav>
+            )}
 
             <div className="container my-5">
                 <div className="d-flex flex-column align-items-center text-center">

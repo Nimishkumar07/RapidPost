@@ -6,7 +6,7 @@ import notificationService from "../services/notificationService.js"
 //index route
 export const index = async (req, res) => {
 
-    const { q, category } = req.query;
+    const { q, category, page = 1, limit = 9 } = req.query;
     let filter = {};
 
     // Search filter
@@ -22,13 +22,31 @@ export const index = async (req, res) => {
         filter.category = category;
     }
 
+    const pageNumber = parseInt(page);
+    const limitNumber = parseInt(limit);
+    const skip = (pageNumber - 1) * limitNumber;
 
-    const allBlogs = await Blog.find(filter).sort({ createdAt: -1 }).populate("author");
+    const allBlogs = await Blog.find(filter)
+                             .sort({ createdAt: -1 })
+                             .skip(skip)
+                             .limit(limitNumber)
+                             .populate("author");
+
+    const totalBlogs = await Blog.countDocuments(filter);
+    const totalPages = Math.ceil(totalBlogs / limitNumber);
 
     // Get all categories for showing in filter option
     const categories = await Blog.distinct("category");
 
-    res.json({ allBlogs, categories });
+    res.json({ 
+        allBlogs, 
+        categories,
+        pagination: {
+            currentPage: pageNumber,
+            totalPages,
+            totalBlogs
+        }
+    });
 }
 
 
