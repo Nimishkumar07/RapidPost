@@ -23,6 +23,7 @@ import MongoStore from 'connect-mongo'
 import passport from 'passport'
 import LocalStrategy from 'passport-local'
 import User from './models/user.js'
+import Blog from './models/blog.js'
 
 import moment from 'moment'
 import { storage } from './cloudConfig.js'
@@ -98,6 +99,44 @@ const sessionOption = {
 app.get('/', (req, res) => {
     res.send("Hi, I am root")
 })
+
+// Dynamic Sitemap Generation for SEO
+app.get('/sitemap.xml', async (req, res) => {
+    try {
+        const blogs = await Blog.find({}, '_id updatedAt createdAt').sort({ createdAt: -1 });
+        
+        let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+        xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+        
+        // Static URLs
+        xml += '  <url>\n';
+        xml += '    <loc>https://www.rapidpost.live/</loc>\n';
+        xml += '    <changefreq>daily</changefreq>\n';
+        xml += '    <priority>1.0</priority>\n';
+        xml += '  </url>\n';
+        
+        // Dynamic Blog URLs
+        blogs.forEach(blog => {
+            xml += '  <url>\n';
+            xml += `    <loc>https://www.rapidpost.live/blogs/${blog._id}</loc>\n`;
+            if (blog.updatedAt || blog.createdAt) {
+                const date = blog.updatedAt || blog.createdAt;
+                xml += `    <lastmod>${new Date(date).toISOString().split('T')[0]}</lastmod>\n`;
+            }
+            xml += '    <changefreq>weekly</changefreq>\n';
+            xml += '    <priority>0.8</priority>\n';
+            xml += '  </url>\n';
+        });
+        
+        xml += '</urlset>';
+        
+        res.header('Content-Type', 'application/xml');
+        res.send(xml);
+    } catch (error) {
+        console.error('Error generating sitemap:', error);
+        res.status(500).send('Error generating sitemap');
+    }
+});
 
 app.set('trust proxy', 1); // Trust the proxy (Render load balancer)
 app.use(session(sessionOption))
