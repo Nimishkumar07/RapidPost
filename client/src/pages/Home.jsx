@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import blogService from '../features/blog/services/blogService';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { Helmet } from 'react-helmet-async';
 import Loader from '../components/ui/Loader';
 import HomeHeader from '../features/blog/components/HomeHeader';
 import BlogCard from '../features/blog/components/BlogCard';
@@ -187,6 +188,13 @@ const Home = () => {
 
     return (
         <div className="position-relative mx-3 mx-sm-5 mx-xl-7">
+            <Helmet>
+                <title>RapidPost - Read & Write Amazing Blogs</title>
+                <meta name="description" content="Discover, create, and share amazing AI-powered blogs instantly with RapidPost." />
+                <meta property="og:title" content="RapidPost - Read & Write Amazing Blogs" />
+                <meta property="og:description" content="Discover, create, and share amazing AI-powered blogs instantly with RapidPost." />
+                <meta property="og:type" content="website" />
+            </Helmet>
 
             <HomeHeader
                 searchTerm={searchTerm}

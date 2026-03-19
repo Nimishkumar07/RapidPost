@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import blogService from '../features/blog/services/blogService';
 import { useAuth } from '../context/AuthContext';
+import { Helmet } from 'react-helmet-async';
 import Loader from '../components/ui/Loader';
 import { useBlogDetails } from '../features/blog/hooks/useBlogDetails';
 import BlogComments from '../features/blog/components/BlogComments';
@@ -196,8 +197,20 @@ const BlogDetails = () => {
     if (error) return <div className="text-center mt-5 text-danger">{error}</div>;
     if (!blog) return <div className="text-center mt-5">Blog not found</div>;
 
+    // Create a plain text summary for SEO descriptions
+    const cleanDescription = new DOMParser().parseFromString(blog.description, 'text/html').body.textContent.slice(0, 150) + '...';
+
     return (
         <div className="position-relative">
+            <Helmet>
+                <title>{blog.title} | RapidPost</title>
+                <meta name="description" content={cleanDescription} />
+                <meta property="og:title" content={blog.title} />
+                <meta property="og:description" content={cleanDescription} />
+                {blog.image?.url && <meta property="og:image" content={blog.image.url} />}
+                <meta property="og:type" content="article" />
+            </Helmet>
+
             <div className="container py-4" style={{ maxWidth: '64rem' }}>
                 <BlogHeader
                     blog={blog}

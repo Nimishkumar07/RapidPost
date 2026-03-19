@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { SimpleEditor } from '@/features/blog/components/tiptap-templates/simple/simple-editor';
 import blogService from '../features/blog/services/blogService';
+import { Helmet } from 'react-helmet-async';
 
 const BlogForm = () => {
     const { id } = useParams();
@@ -111,6 +112,9 @@ const BlogForm = () => {
 
     return (
         <div className="bg-white min-vh-100 py-4">
+            <Helmet>
+                <title>{isEdit ? 'Edit Blog | RapidPost' : 'Create Blog | RapidPost'}</title>
+            </Helmet>
             <div className="container" style={{ maxWidth: '64rem' }}>
                 {/* Header */}
                 <div className="mb-4">
