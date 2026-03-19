@@ -24,7 +24,12 @@ RapidPost is a modern, full-stack blogging platform powered by AI. It features a
 - **Global Toast System**: Non-intrusive, beautiful notification popups for user actions.
 - **Push Notifications**: Native device notifications even when the app is closed.
 
+### 🔍 **SEO & Discovery**
+- **Dynamic Meta Tags**: React Helmet automatically injects dynamic titles and descriptions for rich social media link sharing (Twitter Cards, OpenGraph).
+- **Automated XML Sitemaps**: Native Express endpoint automatically generates and serves dynamic XML sitemaps to Google Search for instant blog indexing.
+
 ### ⚡ **Performance & Architecture**
+- **Smart Pagination**: Backend MongoDB `skip/limit` integration mapped logically to React Router URL params for optimized home feed load times.
 - **Single Page Application (SPA)**: Built with React and Vite for a seamless, app-like feel.
 - **Lazy Loading**: Route-based code splitting to minimize initial load time.
 - **Optimized Navigation**: Smart scroll restoration for a natural browsing experience.
