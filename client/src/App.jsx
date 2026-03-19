@@ -17,6 +17,7 @@ const UserProfile = lazy(() => import('./pages/UserProfile'));
 const EditProfile = lazy(() => import('./pages/EditProfile'));
 const Notifications = lazy(() => import('./pages/Notifications'));
 const NotificationPreferences = lazy(() => import('./pages/NotificationPreferences'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import ScrollToTop from './components/common/ScrollToTop';
@@ -69,6 +70,7 @@ function AppRoutes() {
             <NotificationPreferences />
           </ProtectedRoute>
         } />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
   );
