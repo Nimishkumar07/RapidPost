@@ -1,8 +1,24 @@
-/* eslint-disable no-undef, no-unused-vars */
 import { precacheAndRoute } from 'workbox-precaching';
+import { registerRoute } from 'workbox-routing';
+import { NetworkFirst } from 'workbox-strategies';
+import { ExpirationPlugin } from 'workbox-expiration';
 
 // Precaching offline assets
 precacheAndRoute(self.__WB_MANIFEST);
+
+// Runtime Caching for API Requests (Offline Data & Auth)
+registerRoute(
+  ({ url }) => url.pathname.includes('/current_user') || url.pathname.includes('/blogs'),
+  new NetworkFirst({
+    cacheName: 'rapidpost-api-cache',
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries: 100,
+        maxAgeSeconds: 24 * 60 * 60 // 1 Day
+      })
+    ]
+  })
+);
 
 // Service Worker for Push Notifications
 
