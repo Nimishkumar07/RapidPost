@@ -1,6 +1,6 @@
 # 🚀 RapidPost
 
-**AI-Powered Blogging Platform with Real-Time Notifications**
+**AI-Powered Blogging Platform with Real-Time Features**
 
 **🌐 Live Website:** [RapidPost](https://www.rapidpost.live/)
 
