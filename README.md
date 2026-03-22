@@ -19,7 +19,8 @@ RapidPost is a modern, full-stack blogging platform powered by AI. It features a
 - **Rich Text Editor**: Full WYSIWYG Tiptap editor featuring advanced formatting (Undo/Redo history, Tables, Text Colors, Lists) for manual writing context.
 - **Read Aloud**: Integrated text-to-speech for accessible content consumption.
 
-### 📱 **Real-Time Experience**
+### 📱 **Real-Time & PWA Experience**
+- **Progressive Web App (PWA)**: Fully installable on desktop and mobile devices with seamless offline reading capabilities.
 - **Instant Updates**: Comments, likes, and follows update instantly across all connected clients via Socket.IO.
 - **Global Toast System**: Non-intrusive, beautiful notification popups for user actions.
 - **Push Notifications**: Native device notifications even when the app is closed.
