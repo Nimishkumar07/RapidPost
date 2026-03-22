@@ -1,4 +1,9 @@
 /* eslint-disable no-undef, no-unused-vars */
+import { precacheAndRoute } from 'workbox-precaching';
+
+// Precaching offline assets
+precacheAndRoute(self.__WB_MANIFEST);
+
 // Service Worker for Push Notifications
 
 const CACHE_NAME = 'rapidpost-notifications-v1';
