@@ -121,12 +121,15 @@ npm run dev
 ## 📖 Usage
 
 - **Browse Blogs:** See all published blogs on the home page.
-- **Write a Blog:** Sign up/log in and click "Write" to create a new blog. Choose manual writing or use AI.
-- **AI Generation:** Enter a topic, select tone, length, and format, then click "Generate Content".
+- **Write a Blog:** Sign up/log in and click "Write" to create a new blog in your preferred language. Choose manual writing or use AI.
+- **AI Generation:** Enter a topic, select tone, length, format, and language, then click "Generate Content".
 - **Edit & Manage:** Edit or delete your blogs from the dashboard.
 - **Profile:** Manage your user profile and settings.
 - **Intractive Social features:** likes,reviews,follow
 - **Read Aloud:** Click the “Read Aloud” button on any blog post to have it spoken aloud.
+- **PWA:** Install the app on your device and use it offline.
+- **Voice Typing:** Click a microphone button, and perfectly dictate their blogs straight into the editor in their preferred language.
+- **Push Notifications:** Get notified when someone likes, comments, or follows you.
 
 ## 🌐 API Reference
 
@@ -146,4 +149,4 @@ Developed by [Nimish Kumar](https://www.linkedin.com/in/nimishkumar07/) with ❤
 
 ---
 
-© RapidPost. All rights reserved. Powered by AI technology and real-time notifications.
+© RapidPost. All rights reserved. Powered by AI technology and real-time features.
