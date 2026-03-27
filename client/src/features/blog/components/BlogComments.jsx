@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import blogService from '../services/blogService';
 import { useToast } from '@/context/ToastContext';
+import { optimizeCloudinaryUrl } from '../../../utils/cloudinary';
 
 const BlogComments = ({ blog, setBlog, user }) => {
     const { showToast } = useToast();
@@ -85,7 +86,7 @@ const BlogComments = ({ blog, setBlog, user }) => {
                                 <div className="d-flex align-items-center gap-3 mb-3">
                                     <Link to={`/users/${review.author?._id}`} className="text-decoration-none">
                                         <img
-                                            src={review.author?.avatar?.url || '/default-avatar.png'}
+                                            src={optimizeCloudinaryUrl(review.author?.avatar?.url, 64) || '/default-avatar.png'}
                                             alt={review.author?.name}
                                             className="rounded-circle"
                                             style={{ width: '40px', height: '40px', objectFit: 'cover' }}

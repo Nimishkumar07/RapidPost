@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import moment from 'moment';
 import Loader from '../components/ui/Loader';
+import { optimizeCloudinaryUrl } from '../utils/cloudinary';
 
 const Notifications = () => {
     const { socket } = useAuth(); // Get socket
@@ -132,7 +133,7 @@ const Notifications = () => {
                                             <div className="flex-shrink-0 me-3">
                                                 {notification.sender && notification.sender.avatar ? (
                                                     <img
-                                                        src={notification.sender.avatar.url}
+                                                        src={optimizeCloudinaryUrl(notification.sender.avatar.url, 64)}
                                                         alt={notification.sender.name}
                                                         className="rounded-circle"
                                                         style={{ width: '40px', height: '40px' }}

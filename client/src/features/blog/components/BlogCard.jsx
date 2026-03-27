@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { optimizeCloudinaryUrl } from '../../../utils/cloudinary';
 
 const BlogCard = ({ blog, highlightedBlogId }) => {
     return (
@@ -10,7 +11,7 @@ const BlogCard = ({ blog, highlightedBlogId }) => {
                 <Link to={`/blogs/${blog._id}`} className="card-link text-decoration-none text-dark">
                     {/* Blog Image */}
                     <img
-                        src={blog.image?.url}
+                        src={optimizeCloudinaryUrl(blog.image?.url, 800)}
                         className="card-img-top"
                         alt={blog.title}
                         loading='lazy'
@@ -39,7 +40,7 @@ const BlogCard = ({ blog, highlightedBlogId }) => {
                         <div className="d-flex justify-content-between align-items-center mt-3">
                             <div className="d-flex align-items-center gap-2">
                                 <img
-                                    src={blog.author?.avatar?.url || '/default-avatar.png'}
+                                    src={optimizeCloudinaryUrl(blog.author?.avatar?.url, 64) || '/default-avatar.png'}
                                     alt={blog.author?.name}
                                     className="rounded-circle"
                                     style={{ width: '32px', height: '32px', objectFit: 'cover' }}

@@ -1,3 +1,4 @@
+import { optimizeCloudinaryUrl } from '../../../utils/cloudinary';
 
 const BlogContent = ({ blog, user, isLiked, handleLike, handleShare, handleSave }) => {
     return (
@@ -5,7 +6,7 @@ const BlogContent = ({ blog, user, isLiked, handleLike, handleShare, handleSave 
             {/* Featured Image */}
             <div className="mb-4 mb-md-5">
                 <img
-                    src={blog.image?.url}
+                    src={optimizeCloudinaryUrl(blog.image?.url, 1200)}
                     alt={blog.title}
                     className="img-fluid rounded-4"
                     style={{ height: 'auto', maxHeight: '28rem', width: '100%', objectFit: 'cover' }}

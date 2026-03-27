@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { optimizeCloudinaryUrl } from '../../../utils/cloudinary';
 
 const ProfileHeader = ({ user, currentUser, isMe, isFollowing, handleFollow, stats }) => {
     const { followersCount = 0, followingCount = 0 } = stats || {};
@@ -11,7 +12,7 @@ const ProfileHeader = ({ user, currentUser, isMe, isFollowing, handleFollow, sta
                         <div className="position-relative">
                             <div className="rounded-circle bg-light d-flex align-items-center justify-content-center" style={{ width: '112px', height: '112px' }}>
                                 {user.avatar && user.avatar.url ? (
-                                    <img src={user.avatar.url} alt={user.name} className="rounded-circle" style={{ width: '112px', height: '112px', objectFit: 'cover' }} />
+                                    <img src={optimizeCloudinaryUrl(user.avatar.url, 250)} alt={user.name} className="rounded-circle" style={{ width: '112px', height: '112px', objectFit: 'cover' }} />
                                 ) : (
                                     <span className="text-muted small">No Image</span>
                                 )}
@@ -94,7 +95,7 @@ const ProfileHeaderSafe = ({ user, currentUser, isMe, isFollowing, handleFollow,
                         <div className="position-relative">
                             <div className="rounded-circle bg-light d-flex align-items-center justify-content-center" style={{ width: '112px', height: '112px' }}>
                                 {user.avatar && user.avatar.url ? (
-                                    <img src={user.avatar.url} alt={user.name} className="rounded-circle" style={{ width: '112px', height: '112px', objectFit: 'cover' }} />
+                                    <img src={optimizeCloudinaryUrl(user.avatar.url, 250)} alt={user.name} className="rounded-circle" style={{ width: '112px', height: '112px', objectFit: 'cover' }} />
                                 ) : (
                                     <span className="text-muted small">No Image</span>
                                 )}
