@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, useContext } from 'react';
 import { io } from 'socket.io-client';
 import authService from '../features/auth/services/authService';
+import { setAccessToken } from '../services/api';
 
 const AuthContext = createContext(null);
 
@@ -53,23 +54,45 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (username, password) => {
         const response = await authService.login({ username, password });
-        setUser(response.data.user);
+        if (response.data.accessToken) {
+            setAccessToken(response.data.accessToken);
+            setUser(response.data.user);
+        }
         return response.data;
     };
 
     const signup = async (userData) => {
         const response = await authService.signup(userData);
-        setUser(response.data.user);
+        // Do not set user here, return response to proceed to OTP
         return response.data;
+    };
+    
+    const verifyOTP = async (email, otp) => {
+        const response = await authService.verifyOTP({ email, otp });
+        if (response.data.accessToken) {
+            setAccessToken(response.data.accessToken);
+            setUser(response.data.user);
+        }
+        return response.data;
+    };
+    
+    const googleLogin = async (credential) => {
+         const response = await authService.googleLogin(credential);
+         if (response.data.accessToken) {
+             setAccessToken(response.data.accessToken);
+             setUser(response.data.user);
+         }
+         return response.data;
     };
 
     const logout = async () => {
         await authService.logout();
+        setAccessToken(null);
         setUser(null);
     };
 
     return (
-        <AuthContext.Provider value={{ user, setUser, login, signup, logout, loading, socket }}>
+        <AuthContext.Provider value={{ user, setUser, login, signup, verifyOTP, googleLogin, logout, loading, socket }}>
             {!loading && children}
         </AuthContext.Provider>
     );

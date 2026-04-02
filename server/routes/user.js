@@ -1,32 +1,18 @@
 import express from 'express'
 import wrapAsync from '../utils/wrapAsync.js'
-import User from '../models/user.js'
-import passport from 'passport'
-import { saveRedirectUrl } from '../middleware.js'
-import { SignUp, logIn, logOut, getCurrentUser } from '../controllers/users.js'
+import { SignUp, logIn, logOut, getCurrentUser, VerifyOTP, googleLogin, refreshToken } from '../controllers/users.js'
+import { isLoggedIn } from '../middleware.js'
 
 const router = express.Router()
 
 router.post("/signup", wrapAsync(SignUp))
+router.post("/verify-otp", wrapAsync(VerifyOTP))
+router.post("/login", wrapAsync(logIn))
+router.post("/google-login", wrapAsync(googleLogin))
+router.get("/refresh-token", wrapAsync(refreshToken))
 
-router.post("/login", saveRedirectUrl, (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
-        if (err) {
-            return next(err);
-        }
-        if (!user) {
-            return res.status(401).json({ message: "Invalid credentials" });
-        }
-        req.logIn(user, (err) => {
-            if (err) {
-                return next(err);
-            }
-            logIn(req, res);
-        });
-    })(req, res, next);
-});
-
-router.get("/current_user", getCurrentUser)
+// Protected route
+router.get("/current_user", isLoggedIn, getCurrentUser)
 
 router.get("/logout", logOut)
 

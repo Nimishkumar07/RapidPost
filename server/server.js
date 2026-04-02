@@ -18,10 +18,7 @@ import likeRouter from './routes/like.js'
 import savedRouter from "./routes/saved.js";
 import followRouter from './routes/follow.js'
 import notificationRouter from './routes/notifications.js'
-import session from 'express-session'
-import MongoStore from 'connect-mongo'
-import passport from 'passport'
-import LocalStrategy from 'passport-local'
+import cookieParser from 'cookie-parser'
 import User from './models/user.js'
 import Blog from './models/blog.js'
 
@@ -64,37 +61,12 @@ app.use(cors({
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride("_method"))
+app.use(cookieParser())
 
 app.locals.moment = moment
 
 
-const store = MongoStore.create({
-    mongoUrl: dbUrl,
-    crypto: {
-        secret: process.env.SECRET
-    },
-    touchAfter: 24 * 3600,
-})
-
-store.on("error", () => {
-    console.log("ERROR in MONGO SESSION STORE", err)
-})
-
-const sessionOption = {
-    store,
-    secret: process.env.SECRET,
-    resave: false,
-    saveUninitialized: true,
-    proxy: true, // Required when behind Nginx / Cloudflare proxy
-    cookie: {
-        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        httpOnly: true,
-        // Secure and SameSite are critically important for cross-site (Vercel -> Render) cookies
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-    },
-}
+// Sessions migrated to JWT logic
 
 app.get('/', (req, res) => {
     res.send("Hi, I am root")
@@ -139,19 +111,8 @@ app.get('/sitemap.xml', async (req, res) => {
 });
 
 app.set('trust proxy', 1); // Trust the proxy (Render load balancer)
-app.use(session(sessionOption))
-
-
-app.use(passport.initialize())
-app.use(passport.session())
-passport.use(new LocalStrategy(User.authenticate())) // use static authenticate method of model in LocalStrategy
-
-// use static serialize and deserialize of model for passport session support
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
-    res.locals.currUser = req.user;
     req.io = io // Make io available in all routes
     next()
 })

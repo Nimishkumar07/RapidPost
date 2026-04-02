@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-import passportLocalMongoose from 'passport-local-mongoose'
-
+import bcrypt from "bcrypt";
 
 const Schema = mongoose.Schema
 
@@ -8,6 +7,12 @@ const userSchema = new Schema({
     name: {
         type: String,
         required: true,
+        trim: true
+    },
+    username: {
+        type: String,
+        required: true,
+        unique: true,
         trim: true
     },
     email: {
@@ -18,13 +23,15 @@ const userSchema = new Schema({
         lowercase: true,
         match: [/\S+@\S+\.\S+/, 'is invalid']
     },
+    password: {
+        type: String
+    },
     avatar: {
         url: {
             type: String,
             default: 'https://images.unsplash.com/photo-1593085512500-5d55148d6f0d'
         },
         filename: String,
-
     },
     bio: {
         type: String,
@@ -61,19 +68,23 @@ const userSchema = new Schema({
             p256dh: String,
             auth: String
         }
+    }],
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    googleId: {
+        type: String,
+        default: null
+    },
+    activeSessions: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Session'
     }]
 }, {
-
     timestamps: true
 });
 
-// // Middleware to auto-update blogCount when blogs array changes
-// userSchema.pre("save", function (next) {
-//     this.blogCount = this.blogs.length;
-//     next();
-// });
-
-// Middleware when a blog is added to user
 userSchema.methods.addBlog = async function (blogId) {
     this.blogs.push(blogId);
     this.blogCount = this.blogs.length;
@@ -82,14 +93,18 @@ userSchema.methods.addBlog = async function (blogId) {
 
 // Middleware when a blog is removed from user
 userSchema.methods.removeBlog = async function (blogId) {
-    //  this.blogs.pull(blogId); // Changed to pull for better removal
     this.blogs = this.blogs.filter(id => id.toString() !== blogId.toString());
     this.blogCount = this.blogs.length;
     await this.save();
 };
 
-userSchema.plugin(passportLocalMongoose);
+userSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) return next();
+    if (this.password) {
+        this.password = await bcrypt.hash(this.password, 12);
+    }
+    next();
+});
 
 const User = mongoose.model('User', userSchema);
-
 export default User;

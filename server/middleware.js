@@ -1,14 +1,28 @@
 import Blog from "./models/blog.js"
 import Review from "./models/review.js"
+import User from "./models/user.js"
+import jwt from "jsonwebtoken"
 import { blogSchema, reviewSchema } from './schema.js'
 import ExpressError from "./utils/ExpressError.js"
 import wrapAsync from "./utils/wrapAsync.js"
 
-export const isLoggedIn = (req, res, next) => {
-    if (!req.isAuthenticated()) {
-        return res.status(401).json({ message: "You must be logged in" });
+export const isLoggedIn = async (req, res, next) => {
+    try {
+        const authHeader = req.headers.authorization;
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return res.status(401).json({ message: "You must be logged in" });
+        }
+        
+        const token = authHeader.split(' ')[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret_for_dev');
+        
+        // Pure stateless JWT evaluations (skip database)
+        req.user = decoded;
+        res.locals.currUser = decoded;
+        next();
+    } catch (err) {
+        return res.status(401).json({ message: "Invalid or expired token" });
     }
-    next()
 }
 
 export const saveRedirectUrl = (req, res, next) => {
