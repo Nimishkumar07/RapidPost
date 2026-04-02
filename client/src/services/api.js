@@ -29,24 +29,58 @@ api.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
+let isRefreshing = false;
+let failedQueue = [];
+
+const processQueue = (error, token = null) => {
+    failedQueue.forEach(prom => {
+        if (error) {
+            prom.reject(error);
+        } else {
+            prom.resolve(token);
+        }
+    });
+    failedQueue = [];
+};
+
 api.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
+        
         if (error.response?.status === 401 && !originalRequest._retry) {
+            if (isRefreshing) {
+                // If a refresh is already happening, queue this hook!
+                return new Promise(function(resolve, reject) {
+                    failedQueue.push({ resolve, reject });
+                }).then(token => {
+                    originalRequest.headers['Authorization'] = 'Bearer ' + token;
+                    return api(originalRequest);
+                }).catch(err => {
+                    return Promise.reject(err);
+                });
+            }
+
             originalRequest._retry = true;
+            isRefreshing = true;
+
             try {
-                // If it fails on /current_user due to F5 flush, it catches here
                 const res = await axios.get(`${import.meta.env.VITE_API_URL}/refresh-token`, {
                     withCredentials: true 
                 });
                 const { accessToken } = res.data;
                 setAccessToken(accessToken);
+                
+                processQueue(null, accessToken);
+                
                 originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
                 return api(originalRequest);
             } catch (err) {
+                processQueue(err, null);
                 setAccessToken(null);
                 return Promise.reject(err);
+            } finally {
+                isRefreshing = false;
             }
         }
         return Promise.reject(error);
