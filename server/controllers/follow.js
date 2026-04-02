@@ -124,10 +124,6 @@ export const updateProfile = async (req, res, next) => {
     user = await user.save()
   }
 
-  // Re-login the user to ensure session stays valid if username changed
-  req.login(user, (err) => {
-    if (err) return next(err);
-    res.json({ message: "Profile updated", user });
-  });
+  res.json({ message: "Profile updated", user });
 
 }
