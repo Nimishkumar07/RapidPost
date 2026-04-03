@@ -12,6 +12,13 @@ RapidPost is a modern, full-stack blogging platform powered by AI. It features a
 
 ## ✨ Features
 
+### 🔒 **Enterprise-Grade Authentication**
+- **Stateless JWT Architecture**: Lightning-fast API validation utilizing secure in-memory Access Tokens to definitively prevent XSS attacks.
+- **Silent Token Rotation**: Axios Interceptor explicitly features a Promise Queue, automatically and invisibly rolling HttpOnly Refresh Tokens to perpetually validate offline resilience without race conditions.
+- **Google OAuth Integration**: Direct, seamless, and mathematically secure Google provider logins utilizing `@react-oauth/google`.
+- **OTP Email Verification**: Automated NodeMailer pins inherently secured via MongoDB's native Time-To-Live (TTL) auto-dropping pipelines.
+- **Bcrypt Hash Enforcement**: Explicit algorithmic salt configurations replacing legacy passport "black boxes" for total database control.
+
 ### 🤖 **AI & Content**
 - **AI-Powered Writing**: Generate blog content in seconds using Google Gemini AI (customizable tone, length, format, and language).
 - **Voice Typing (Web Speech API)**: Built-in Speech-to-Text allows users to perfectly transcribe spoken words natively into the text editor in over 10 languages without physical hardware keyboards.
@@ -42,14 +49,16 @@ RapidPost is a modern, full-stack blogging platform powered by AI. It features a
 - **React** - Functional components & Hooks
 - **Vite** - Next-generation build tool
 - **React Router 6** - Client-side routing
+- **Axios** - Network handling & queue-locked interceptors
 - **Bootstrap 5** - Responsive UI components
 - **Context API** - Global state management (Auth, Notifications, Toasts)
 
 ### **Backend (`/server`)**
 - **Node.js & Express** - Scalable server runtime
 - **MongoDB & Mongoose** - Document-based database
+- **JWT & Bcrypt** - Secure stateless authentication & hashing protocols
 - **Socket.IO** - Real-time bidirectional communication
-- **Passport.js** - Secure authentication strategies
+- **Nodemailer** - Verification communications
 - **Cloudinary** - Cloud image storage & optimization
 
 ## 📂 Project Structure
@@ -66,7 +75,7 @@ RapidPost/
 │
 ├── 📁 server/              # Node.js Backend
 │   ├── 📁 controllers/     # Request handlers
-│   ├── 📁 models/          # Mongoose schemas
+│   ├── 📁 models/          # Mongoose schemas (Blog, User, OTP, Session)
 │   ├── 📁 routes/          # API endpoints
 │   ├── 📁 services/        # Business logic (AI, Notifications)
 │   └── server.js           # Entry point
@@ -89,10 +98,16 @@ npm install
 Create a `.env` file in `server/` with the following:
 ```env
 ATLASDB_URL=your_mongodb_uri
+PORT=8080
+NODE_ENV=development # Or 'production'
+JWT_SECRET=your_jwt_access_secret
+REFRESH_TOKEN_SECRET=your_jwt_refresh_secret
+GOOGLE_CLIENT_ID=your_google_web_client_id
+EMAIL_USER=your_gmail_address
+EMAIL_PASS=your_16_digit_app_password
 CLOUD_NAME=your_cloudinary_name
 CLOUD_API_KEY=your_key
 CLOUD_API_SECRET=your_secret
-SECRET=your_session_secret
 GEMINI_API_KEY=your_gemini_key
 VAPID_PUBLIC_KEY=your_vapid_public
 VAPID_PRIVATE_KEY=your_vapid_private
@@ -108,6 +123,14 @@ Open a new terminal:
 ```bash
 cd client
 npm install
+```
+Create a `.env` file in `client/` with the following:
+```env
+VITE_API_URL=http://localhost:8080
+VITE_GOOGLE_CLIENT_ID=your_google_web_client_id
+```
+Start the frontend server:
+```bash
 npm run dev
 # Runs on localhost:5173
 ```
@@ -125,11 +148,11 @@ npm run dev
 - **AI Generation:** Enter a topic, select tone, length, format, and language, then click "Generate Content".
 - **Edit & Manage:** Edit or delete your blogs from the dashboard.
 - **Profile:** Manage your user profile and settings.
-- **Intractive Social features:** likes,reviews,follow
+- **Interactive Social features:** likes, reviews, follow
 - **Read Aloud:** Click the “Read Aloud” button on any blog post to have it spoken aloud.
-- **PWA:** Install the app on your device and use it offline.
-- **Voice Typing:** Click a microphone button, and perfectly dictate their blogs straight into the editor in their preferred language.
+- **Voice Typing:** Click a microphone button, and perfectly dictate blogs natively into the editor in their preferred language.
 - **Push Notifications:** Get notified when someone likes, comments, or follows you.
+- **PWA:** Install the app on your device and use it offline.
 
 ## 🌐 API Reference
 
@@ -139,9 +162,12 @@ npm run dev
 | `POST` | `/blogs` | Create a new blog |
 | `GET` | `/blogs/:id` | Get details of a blog |
 | `POST` | `/blogs/ai/generate` | Generate content using AI |
-| `POST` | `/signup` | Register a new user |
-| `POST` | `/login` | Authenticate user |
-| `GET` | `/notifications` | Get user notifications |
+| `POST` | `/signup` | Register a new user + Send OTP |
+| `POST` | `/verify-otp` | Verify email address & issue JWT |
+| `POST` | `/login` | Authenticate user via Bcrypt |
+| `POST` | `/google-login` | Authenticate user via Google OAuth |
+| `GET` | `/refresh-token` | Rotate HttpOnly Session token seamlessly |
+| `GET` | `/current_user` | Fetch active user credentials strictly |
 
 ## 💬 Support
 
