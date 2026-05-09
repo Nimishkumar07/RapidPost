@@ -18,7 +18,7 @@ RapidPost is a modern, full-stack blogging platform powered by AI. It features a
 - **Google OAuth Integration**: Direct, seamless, and mathematically secure Google provider logins utilizing `@react-oauth/google`.
 - **OTP Email Verification**: Automated NodeMailer pins inherently secured via MongoDB's native Time-To-Live (TTL) auto-dropping pipelines.
 - **Bcrypt Hash Enforcement**: Explicit algorithmic salt configurations replacing legacy passport "black boxes" for total database control.
-- **Production-Grade Rate Limiting**: Refined request limiting across all endpoints to definitively prevent brute-force credential stuffing and API abuse.
+- **Production-Grade Rate Limiting**: Granular request limiting across all endpoints to definitively prevent brute-force credential stuffing and API abuse.
 
 ### 🤖 **AI & Content**
 - **AI-Powered Writing**: Generate blog content in seconds using Google Gemini AI (customizable tone, length, format, and language).
