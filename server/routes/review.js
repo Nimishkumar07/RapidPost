@@ -6,13 +6,14 @@ import Blog from '../models/blog.js'
 import Review from '../models/review.js'
 import { validateReview,isLoggedIn,isReviewAuthor } from '../middleware.js'
 import { createReview,destroyReview, } from '../controllers/reviews.js'
+import { creationLimiter } from '../utils/rateLimiter.js'
 
 const router = express.Router({mergeParams:true})
 
 
 
 //post review route
-router.post("/",isLoggedIn,validateReview,wrapAsync(createReview))
+router.post("/", isLoggedIn, creationLimiter, validateReview, wrapAsync(createReview))
 
 //delete review route
 router.delete("/:reviewId",isLoggedIn,isReviewAuthor, wrapAsync(destroyReview))

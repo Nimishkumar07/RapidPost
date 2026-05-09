@@ -7,6 +7,7 @@ import { validateBlog } from '../middleware.js'
 import { index, createBlog, showBlog, updateBlog, destroyBlog, generateBlog } from '../controllers/blogs.js'
 import multer from 'multer'
 import { storage } from '../cloudConfig.js'
+import { creationLimiter } from '../utils/rateLimiter.js'
 const upload = multer({ storage })
 
 const router = express.Router()
@@ -24,17 +25,17 @@ router.get("/:id", wrapAsync(showBlog))
 //increment view route removed (handled in show)
 
 //create route
-router.post("/", isLoggedIn, upload.single("blog[image]"), validateBlog, wrapAsync(createBlog))
+router.post("/", isLoggedIn, creationLimiter, upload.single("blog[image]"), validateBlog, wrapAsync(createBlog))
 
 
 
 //update route
-router.put("/:id", isLoggedIn, isOwner, upload.single("blog[image]"), validateBlog, wrapAsync(updateBlog))
+router.put("/:id", isLoggedIn, isOwner, creationLimiter, upload.single("blog[image]"), validateBlog, wrapAsync(updateBlog))
 
 //delete route
 router.delete("/:id", isLoggedIn, wrapAsync(destroyBlog))
 
 //generate with ai
-router.post('/ai/generate', isLoggedIn, wrapAsync(generateBlog))
+router.post('/ai/generate', isLoggedIn, creationLimiter, wrapAsync(generateBlog))
 
 export default router

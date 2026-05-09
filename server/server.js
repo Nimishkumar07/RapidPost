@@ -21,6 +21,7 @@ import notificationRouter from './routes/notifications.js'
 import cookieParser from 'cookie-parser'
 import User from './models/user.js'
 import Blog from './models/blog.js'
+import { apiLimiter } from './utils/rateLimiter.js'
 
 import moment from 'moment'
 import { storage } from './cloudConfig.js'
@@ -53,6 +54,8 @@ const __dirname = dirname(__filename);
 
 
 //middlewares
+app.use(apiLimiter);
+
 app.use(cors({
     origin: ["https://rapidpost.live",
         "https://www.rapidpost.live"],
