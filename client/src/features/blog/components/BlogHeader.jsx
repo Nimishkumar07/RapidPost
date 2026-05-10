@@ -1,7 +1,17 @@
 import { Link } from 'react-router-dom';
 import { optimizeCloudinaryUrl } from '../../../utils/cloudinary';
 
+const calculateReadTime = (content) => {
+    if (!content) return 1;
+    const text = content.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ');
+    const words = text.trim().split(/\s+/).filter(word => word.length > 0).length;
+    const readTime = Math.ceil(words / 200);
+    return readTime || 1;
+};
+
 const BlogHeader = ({ blog, user, handleReadAloud, isReading }) => {
+    const readTime = calculateReadTime(blog?.description);
+
     return (
         <header className="mb-4 mb-md-5">
             <div className="mb-3">
@@ -76,7 +86,7 @@ const BlogHeader = ({ blog, user, handleReadAloud, isReading }) => {
                 </span>
                 <span className="read d-inline-flex align-items-center">
                     <i className="fa-regular fa-clock me-2"></i>
-                    5 min read
+                    {readTime} min read
                 </span>
                 <span className="d-inline-flex align-items-center ms-auto">
                     <button onClick={handleReadAloud} type="button" className="btnn-decore btn-link text-muted text-decoration-none p-0 d-inline-flex align-items-center">
