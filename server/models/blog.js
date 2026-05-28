@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 const blogSchema = new Schema({
     title: { type: String, required: true }, 
-    description: { type: String, required: true , minlength: 10}, 
+    description: { type: String, required: true }, 
     image: {
          url:String,
          filename:String,
