@@ -25,6 +25,7 @@ const Login = () => {
     const [otp, setOtp] = useState('');
 
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const { login, signup, verifyOTP, googleLogin } = useAuth();
     const { showToast } = useToast();
     const navigate = useNavigate();
@@ -33,19 +34,37 @@ const Login = () => {
 
     const handleLoginSubmit = async (e) => {
         e.preventDefault();
+        if (loading) return;
         setError('');
+
+        if (loginPassword.length < 6) {
+            setError('Password must be at least 6 characters long');
+            return;
+        }
+
+        setLoading(true);
         try {
             await login(loginUsername, loginPassword);
             showToast("Welcome back!", "success");
             navigate('/blogs');
         } catch (err) {
             setError(err.response?.data?.message || 'Login failed');
+        } finally {
+            setLoading(false);
         }
     };
 
     const handleSignupSubmit = async (e) => {
         e.preventDefault();
+        if (loading) return;
         setError('');
+
+        if (!showOTP && signupData.password.length < 6) {
+            setError('Password must be at least 6 characters long');
+            return;
+        }
+
+        setLoading(true);
         try {
             if (!showOTP) {
                 await signup(signupData);
@@ -58,6 +77,8 @@ const Login = () => {
             }
         } catch (err) {
             setError(err.response?.data?.message || err.response?.data?.error || 'Signup failed');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -117,9 +138,12 @@ const Login = () => {
                                 type="password"
                                 value={loginPassword}
                                 onChange={(e) => setLoginPassword(e.target.value)}
+                                minLength="6"
                                 required
                             />
-                            <button className="flip-card__btn">Let's go!</button>
+                            <button className="flip-card__btn" disabled={loading}>
+                                {loading ? 'Logging in...' : "Let's go!"}
+                            </button>
                             <div className="mt-3 d-flex justify-content-center">
                                 <GoogleLogin 
                                     onSuccess={handleGoogleSuccess} 
@@ -167,6 +191,7 @@ const Login = () => {
                                         type="password"
                                         value={signupData.password}
                                         onChange={handleSignupChange}
+                                        minLength="6"
                                         required
                                     />
                                 </>
@@ -186,7 +211,9 @@ const Login = () => {
                                     />
                                 </>
                             )}
-                            <button className="flip-card__btn">{showOTP ? 'Verify!' : 'Confirm!'}</button>
+                            <button className="flip-card__btn" disabled={loading}>
+                                {loading ? 'Processing...' : (showOTP ? 'Verify!' : 'Confirm!')}
+                            </button>
                             {!showOTP && (
                                 <div className="mt-3 d-flex justify-content-center">
                                     <GoogleLogin 
