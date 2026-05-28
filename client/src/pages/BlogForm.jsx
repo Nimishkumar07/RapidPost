@@ -83,10 +83,10 @@ const BlogForm = () => {
             return;
         }
 
-        const plainText = formData.content.replace(/<[^>]*>?/gm, '');
-        const wordCount = plainText.trim().split(/\\s+/).filter(word => word.length > 0).length;
-        if (wordCount < 300) {
-            setError(`Blog content must be at least 300 words. Current word count: ${wordCount}`);
+        const text = formData.content.replace(/<[^>]*>?/gm, '').replace(/&nbsp;/g, ' ');
+        const wordCount = text.trim().split(/\s+/).filter(word => word.length > 0).length;
+        if (wordCount < 250) {
+            setError(`Blog content must be at least 250 words. Current word count: ${wordCount}`);
             return;
         }
 
