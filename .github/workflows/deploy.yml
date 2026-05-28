@@ -27,15 +27,16 @@ jobs:
 
             cd ~/RapidPost
 
-            echo "📥 Pulling latest code"
-            git pull origin main
+            echo "📥 Fetching and resetting to latest code"
+            git fetch --all
+            git reset --hard origin/main
 
             echo "📦 Installing dependencies"
             cd server
             npm install
 
-            echo "♻️ Restarting PM2"
-            pm2 restart rapidpost-backend || pm2 start server.js --name rapidpost-backend
+            echo "♻️ Reloading PM2 (Zero-Downtime)"
+            pm2 reload rapidpost-backend || pm2 start server.js --name rapidpost-backend
 
             echo "✅ Deployment complete"
           EOF
