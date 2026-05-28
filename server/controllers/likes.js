@@ -35,8 +35,11 @@ export const toggleLike = async (req, res) => {
         // Create notification for blog author (only if not liking own post)
         if (blog.author._id.toString() !== userId.toString()) {
             try {
+                console.log("[Debug Like Notification] userId:", userId);
                 const senderUser = await User.findById(userId);
+                console.log("[Debug Like Notification] senderUser:", senderUser);
                 const senderName = senderUser ? senderUser.name : 'Someone';
+                console.log("[Debug Like Notification] senderName:", senderName);
 
                 const notification = await notificationService.createNotification({
                     recipient: blog.author._id,

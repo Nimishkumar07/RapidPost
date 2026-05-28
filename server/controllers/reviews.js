@@ -39,8 +39,11 @@ export const createReview = async (req, res) => {
                 ? req.body.review.comment.substring(0, 50) + '...'
                 : req.body.review.comment;
 
+            console.log("[Debug Comment Notification] req.user._id:", req.user._id);
             const senderUser = await User.findById(req.user._id);
+            console.log("[Debug Comment Notification] senderUser:", senderUser);
             const senderName = senderUser ? senderUser.name : 'Someone';
+            console.log("[Debug Comment Notification] senderName:", senderName);
 
             const notification = await notificationService.createNotification({
                 recipient: blog.author._id,
