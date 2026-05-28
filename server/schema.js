@@ -6,8 +6,8 @@ export const blogSchema = Joi.object({
         description: Joi.string().custom((value, helpers) => {
             const text = value.replace(/<[^>]*>?/gm, '').replace(/&nbsp;/g, ' ');
             const wordCount = text.trim().split(/\s+/).filter(word => word.length > 0).length;
-            if (wordCount < 250) {
-                return helpers.message('Description must be at least 300 words long');
+            if (wordCount < 100) {
+                return helpers.message('Description must be at least 100 words long');
             }
             return value;
         }).required(),
