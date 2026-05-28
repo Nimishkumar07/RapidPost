@@ -1,5 +1,6 @@
 import Review from "../models/review.js";
 import Blog from "../models/blog.js"
+import User from "../models/user.js";
 import notificationService from "../services/notificationService.js";
 
 import { getIO } from '../socket.js';
@@ -38,11 +39,14 @@ export const createReview = async (req, res) => {
                 ? req.body.review.comment.substring(0, 50) + '...'
                 : req.body.review.comment;
 
+            const senderUser = await User.findById(req.user._id);
+            const senderName = senderUser ? senderUser.name : 'Someone';
+
             const notification = await notificationService.createNotification({
                 recipient: blog.author._id,
                 sender: req.user._id,
                 type: 'comment',
-                message: `${req.user.name} commented on your blog post "${blog.title}": "${commentPreview}"`,
+                message: `${senderName} commented on your blog post "${blog.title}": "${commentPreview}"`,
                 relatedBlog: blog._id,
                 relatedComment: newReview._id
             });

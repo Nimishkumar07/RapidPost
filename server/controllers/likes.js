@@ -1,6 +1,7 @@
 
 import { getIO } from '../socket.js';
 import Blog from "../models/blog.js";
+import User from "../models/user.js";
 import notificationService from "../services/notificationService.js";
 
 export const toggleLike = async (req, res) => {
@@ -34,11 +35,14 @@ export const toggleLike = async (req, res) => {
         // Create notification for blog author (only if not liking own post)
         if (blog.author._id.toString() !== userId.toString()) {
             try {
+                const senderUser = await User.findById(userId);
+                const senderName = senderUser ? senderUser.name : 'Someone';
+
                 const notification = await notificationService.createNotification({
                     recipient: blog.author._id,
                     sender: userId,
                     type: 'like',
-                    message: `${req.user.name} liked your blog post "${blog.title}"`,
+                    message: `${senderName} liked your blog post "${blog.title}"`,
                     relatedBlog: blog._id
                 });
 

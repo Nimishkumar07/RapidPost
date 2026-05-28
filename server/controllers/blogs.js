@@ -141,7 +141,7 @@ export const createBlog = async (req, res, next) => {
                     recipient: followerId,
                     sender: req.user._id,
                     type: 'new_post',
-                    message: `${req.user.name} published a new blog post "${newBlog.title}"`,
+                    message: `${user.name} published a new blog post "${newBlog.title}"`,
                     relatedBlog: newBlog._id
                 });
 

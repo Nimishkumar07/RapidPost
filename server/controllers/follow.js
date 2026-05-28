@@ -30,11 +30,14 @@ export const toggleFollow = async (req, res) => {
 
     // Create follow notification
     try {
+      const senderUser = await User.findById(currentUserId);
+      const senderName = senderUser ? senderUser.name : 'Someone';
+
       const notification = await notificationService.createNotification({
         recipient: targetUserId,
         sender: currentUserId,
         type: 'follow',
-        message: `${req.user.name} started following you`
+        message: `${senderName} started following you`
       });
 
       // Send real-time notification if created

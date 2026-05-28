@@ -13,6 +13,7 @@ const NotificationPreferences = () => {
         newPosts: true
     });
     const [loading, setLoading] = useState(true);
+    const [actionPending, setActionPending] = useState(false);
     const { showToast } = useToast();
 
     useEffect(() => {
@@ -30,6 +31,8 @@ const NotificationPreferences = () => {
     }, []);
 
     const handleToggle = async (key) => {
+        if (actionPending) return;
+        setActionPending(true);
         const newPreferences = { ...preferences, [key]: !preferences[key] };
         setPreferences(newPreferences);
 
@@ -42,14 +45,24 @@ const NotificationPreferences = () => {
             showToast("Failed to update preferences", "error");
             // Revert on failure
             setPreferences(preferences);
+        } finally {
+            setActionPending(false);
         }
     };
 
     const handlePushToggle = async () => {
-        if (subscription) {
-            await unsubscribeFromPush();
-        } else {
-            await subscribeToPush();
+        if (actionPending) return;
+        setActionPending(true);
+        try {
+            if (subscription) {
+                await unsubscribeFromPush();
+            } else {
+                await subscribeToPush();
+            }
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setActionPending(false);
         }
     };
 
@@ -80,6 +93,7 @@ const NotificationPreferences = () => {
                                         id="likesToggle"
                                         checked={preferences.likes}
                                         onChange={() => handleToggle('likes')}
+                                        disabled={actionPending}
                                     />
                                     <label className="form-check-label" htmlFor="likesToggle">
                                         <strong>Like Notifications</strong>
@@ -98,6 +112,7 @@ const NotificationPreferences = () => {
                                         id="commentsToggle"
                                         checked={preferences.comments}
                                         onChange={() => handleToggle('comments')}
+                                        disabled={actionPending}
                                     />
                                     <label className="form-check-label" htmlFor="commentsToggle">
                                         <strong>Comment Notifications</strong>
@@ -116,6 +131,7 @@ const NotificationPreferences = () => {
                                         id="followsToggle"
                                         checked={preferences.follows}
                                         onChange={() => handleToggle('follows')}
+                                        disabled={actionPending}
                                     />
                                     <label className="form-check-label" htmlFor="followsToggle">
                                         <strong>Follow Notifications</strong>
@@ -134,6 +150,7 @@ const NotificationPreferences = () => {
                                         id="newPostsToggle"
                                         checked={preferences.newPosts}
                                         onChange={() => handleToggle('newPosts')}
+                                        disabled={actionPending}
                                     />
                                     <label className="form-check-label" htmlFor="newPostsToggle">
                                         <strong>New Post Notifications</strong>
@@ -154,8 +171,19 @@ const NotificationPreferences = () => {
                                         type="button"
                                         className={`btn btn-sm ${subscription ? 'btn-outline-danger' : 'btn-success'}`}
                                         onClick={handlePushToggle}
+                                        disabled={actionPending}
                                     >
-                                        <i className={`bi ${subscription ? 'bi-bell-slash' : 'bi-bell-fill'}`}></i> {subscription ? 'Disable Push Notifications' : 'Enable Push Notifications'}
+                                        {actionPending ? (
+                                            <>
+                                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                                Processing...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <i className={`bi ${subscription ? 'bi-bell-slash' : 'bi-bell-fill'} me-2`}></i>
+                                                {subscription ? 'Disable Push Notifications' : 'Enable Push Notifications'}
+                                            </>
+                                        )}
                                     </button>
                                 </div>
                             </div>
