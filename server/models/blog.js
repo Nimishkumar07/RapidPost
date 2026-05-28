@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 const blogSchema = new Schema({
     title: { type: String, required: true }, 
-    description: { type: String, required: true }, 
+    description: { type: String, required: true , minlength: 10}, 
     image: {
          url:String,
          filename:String,
@@ -16,7 +16,7 @@ const blogSchema = new Schema({
     likes: [{ type: Schema.Types.ObjectId, ref: "User" 
     }], 
     reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }], 
-    views: { type: Number, default: 69 }, 
+    views: { type: Number, default: 0 }, 
     
      
 },{timestamps:true})
