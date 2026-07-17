@@ -76,7 +76,25 @@ function AppRoutes() {
   );
 }
 
-function App() {
+// Temporary Maintenance Component
+function Maintenance() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', textAlign: 'center', padding: '20px', backgroundColor: '#f8f9fa', color: '#212529' }}>
+      <div style={{ maxWidth: '600px', padding: '40px', backgroundColor: 'white', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+        <h1 style={{ fontSize: '2rem', marginBottom: '20px', color: '#0d6efd' }}>Temporarily Unavailable</h1>
+        <p style={{ fontSize: '1.1rem', color: '#495057', lineHeight: '1.6', marginBottom: '15px' }}>
+          I'm migrating the backend to a new cloud environment. While this is in progress, the application is temporarily unavailable.
+        </p>
+        <p style={{ fontSize: '1.1rem', color: '#495057', lineHeight: '1.6' }}>
+          Thanks for your patience. I expect everything to be back online soon.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// Rename original App to OriginalApp temporarily
+function OriginalApp() {
   return (
     <Router>
       <ToastProvider>
@@ -96,6 +114,17 @@ function App() {
       </ToastProvider>
     </Router>
   )
+}
+
+function App() {
+  // Toggle this boolean to switch between maintenance mode and the actual app
+  const isMaintenanceMode = true; 
+  
+  if (isMaintenanceMode) {
+    return <Maintenance />;
+  }
+  
+  return <OriginalApp />;
 }
 
 export default App
