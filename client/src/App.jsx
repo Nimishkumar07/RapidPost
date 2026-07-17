@@ -88,6 +88,9 @@ function Maintenance() {
         <p style={{ fontSize: '1.1rem', color: '#495057', lineHeight: '1.6' }}>
           Thanks for your patience. I expect everything to be back online soon.
         </p>
+        <a href="https://www.linkedin.com/in/nimishkumar07/" target="_blank" rel="noopener noreferrer" style={{ fontSize: '1.1rem', color: '#0d6efd', lineHeight: '1.6' }}>
+          <p style={{ fontSize: '1.1rem', color: '#0d6efd', lineHeight: '1.6' }}>Connect on LinkedIn</p>
+        </a>
       </div>
     </div>
   );
